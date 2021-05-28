@@ -1,0 +1,23 @@
+{
+  "name": "alkemy-challenge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucianomazzuca/alkemy-challenge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lucianomazzuca/alkemy-challenge/issues"
+  },
+  "homepage": "https://github.com/lucianomazzuca/alkemy-challenge#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
