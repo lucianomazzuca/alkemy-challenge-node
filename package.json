@@ -19,5 +19,11 @@
   "homepage": "https://github.com/lucianomazzuca/alkemy-challenge#readme",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.27.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.4"
   }
 }
