@@ -4,10 +4,11 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/app.js",
     "db:migration": "sequelize-cli db:migrate",
-    "db:undo-migration": "sequelize-cli db:migrate:undo"
+    "db:undo-migration": "sequelize-cli db:migrate:undo",
+    "test": "mocha 'src/**/__test__/*'",
+    "test:watch": "mocha 'src/**/__test__/*' --watch "
   },
   "repository": {
     "type": "git",
