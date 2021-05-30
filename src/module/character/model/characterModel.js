@@ -1,8 +1,8 @@
 const { DataTypes, Model } = require("sequelize");
 
-module.exports = class Movie extends Model {
+module.exports = class Character extends Model {
   static setup(sequelizeInstance) {
-    Movie.init(
+    Character.init(
       {
         id: {
           type: DataTypes.INTEGER,
@@ -10,30 +10,31 @@ module.exports = class Movie extends Model {
           autoIncrement: true,
           primaryKey: true,
         },
-        title: {
+        name: {
           type: DataTypes.STRING,
           allowNull: false,
         },
-        release_date: {
-          type: DataTypes.DATEONLY,
+        age: {
+          type: DataTypes.INTEGER,
           allowNull: false,
         },
-        score: {
-          type: DataTypes.STRING,
+        weight: {
+          type: DataTypes.INTEGER,
           allowNull: false,
         },
-        image: {
+        story: {
           type: DataTypes.STRING,
+          allowNull: false,
         },
       },
       {
         sequelize: sequelizeInstance,
         underscored: true,
-        tableName: "movies",
-        modelName: "Movie",
+        tableName: "characters",
+        modelName: "Character",
       }
     );
 
-    return Movie;
+    return Character;
   }
 };
