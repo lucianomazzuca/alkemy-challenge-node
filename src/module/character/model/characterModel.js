@@ -26,6 +26,9 @@ module.exports = class Character extends Model {
           type: DataTypes.STRING,
           allowNull: false,
         },
+        image: {
+          type: DataTypes.STRING,
+        },
       },
       {
         sequelize: sequelizeInstance,
