@@ -37,9 +37,16 @@ module.exports = class Movie extends Model {
     return Movie;
   }
 
-  static setupAssociation(CharacterModel) {
+  static setupAssociation(CharacterModel, GenreModel) {
     Movie.belongsToMany(CharacterModel, {
       through: 'movies_characters',
+      foreignKey: 'movie_id',
+      as: 'characters',
+      uniqueKey: 'id'
+    })
+
+    Movie.belongsToMany(GenreModel, {
+      through: 'movies_genres',
       foreignKey: 'movie_id',
       as: 'characters',
       uniqueKey: 'id'
