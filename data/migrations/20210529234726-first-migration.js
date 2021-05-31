@@ -24,6 +24,8 @@ module.exports = {
       image: {
         type: Sequelize.DataTypes.STRING,
       },
+      created_at: Sequelize.DATE,
+      updated_at: Sequelize.DATE,
     });
 
     await queryInterface.createTable("characters", {
@@ -52,6 +54,8 @@ module.exports = {
       image: {
         type: Sequelize.DataTypes.STRING,
       },
+      created_at: Sequelize.DATE,
+      updated_at: Sequelize.DATE,
     });
 
     await queryInterface.createTable("genres", {
@@ -68,6 +72,8 @@ module.exports = {
       image: {
         type: Sequelize.DataTypes.STRING,
       },
+      created_at: Sequelize.DATE,
+      updated_at: Sequelize.DATE,
     });
 
     await queryInterface.createTable("movies_characters", {
