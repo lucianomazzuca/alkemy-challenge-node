@@ -10,7 +10,7 @@ describe("Movie repository methods", () => {
   let movieRepository;
   let movieModel;
 
-  before(async () => {
+  beforeEach(async () => {
     // Setup DB in memory
     const sequelizeInstance = new Sequelize("sqlite::memory", {
       logging: false,
@@ -41,13 +41,25 @@ describe("Movie repository methods", () => {
       await movieRepository.save(movie);
 
       movie.id = 1;
-      movie.title = 'Interstellar';
+      movie.title = "Interstellar";
 
       await movieRepository.save(movie);
 
       const savedMovie = await movieModel.findByPk(1);
       expect(savedMovie.id).to.equal(1);
       expect(savedMovie.title).to.equal("Interstellar");
+    });
+  });
+
+  describe("getAll method", () => {
+    it("should return an array of two movies", async () => {
+      const movie = createMovieTest();
+      await movieRepository.save(movie);
+      await movieRepository.save(movie);
+
+      const moviesInDb = await movieRepository.getAll();
+      console.log(moviesInDb)
+      expect(moviesInDb).to.have.lengthOf(2)
     });
   });
 });
