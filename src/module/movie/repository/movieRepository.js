@@ -13,11 +13,15 @@ module.exports = class MovieRepository {
     await newMovie.save();
 
     return fromModelToEntity(newMovie);
-  };
+  }
 
   async getAll() {
     const movies = await this.movieModel.findAll();
 
-    return movies.map(movie => fromModelToEntity(movie));
+    return movies.map((movie) => fromModelToEntity(movie));
+  }
+
+  async delete(id) {
+    return Boolean(await this.movieModel.destroy({ where: { id } }));
   }
 };

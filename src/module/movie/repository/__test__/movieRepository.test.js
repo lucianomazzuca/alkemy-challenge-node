@@ -52,14 +52,31 @@ describe("Movie repository methods", () => {
   });
 
   describe("getAll method", () => {
-    it("should return an array of two movies", async () => {
+    it("should return all movies in db", async () => {
       const movie = createMovieTest();
       await movieRepository.save(movie);
       await movieRepository.save(movie);
 
       const moviesInDb = await movieRepository.getAll();
-      console.log(moviesInDb)
-      expect(moviesInDb).to.have.lengthOf(2)
+      expect(moviesInDb).to.have.lengthOf(2);
+      expect(moviesInDb[0].id).to.equal(1);
+      expect(moviesInDb[1].id).to.equal(2);
     });
   });
+
+  describe("deletem method", () => {
+    it("delete removes a movie from db and returns true", async () => {
+      const movie = createMovieTest();
+      await movieRepository.save(movie);
+      await movieRepository.save(movie);
+  
+      const isDeleted = await movieRepository.delete(1);
+      expect(isDeleted).to.equal(true);
+      
+      const moviesInDb = await movieModel.findAll();
+      expect(moviesInDb).to.have.lengthOf(1);
+      expect(moviesInDb[0].id).to.equal(2);
+    });
+
+  })
 });
