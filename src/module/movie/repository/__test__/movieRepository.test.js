@@ -2,9 +2,9 @@ const { expect } = require("chai");
 
 const { Sequelize } = require("sequelize");
 
-const MovieModel = require('../../model/movieModel');
-const MovieRepository = require('../movieRepository');
-const createMovieTest = require('../../fixture/productFixture');
+const MovieModel = require("../../model/movieModel");
+const MovieRepository = require("../movieRepository");
+const createMovieTest = require("../../fixture/movieFixture");
 
 describe("Movie repository methods", () => {
   let movieRepository;
@@ -33,6 +33,21 @@ describe("Movie repository methods", () => {
       const savedMovie = await movieModel.findByPk(1);
       expect(savedMovie.id).to.equal(1);
       expect(savedMovie.name).to.equal(movie.name);
-    })
-  })
-})
+    });
+
+    it("should update an existing movie in the db", async () => {
+      const movie = createMovieTest();
+
+      await movieRepository.save(movie);
+
+      movie.id = 1;
+      movie.title = 'Interstellar';
+
+      await movieRepository.save(movie);
+
+      const savedMovie = await movieModel.findByPk(1);
+      expect(savedMovie.id).to.equal(1);
+      expect(savedMovie.title).to.equal("Interstellar");
+    });
+  });
+});
