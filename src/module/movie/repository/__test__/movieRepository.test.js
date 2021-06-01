@@ -2,6 +2,8 @@ const { expect } = require("chai");
 
 const { Sequelize } = require("sequelize");
 
+const CharacterModel = require("../../../character/model/characterModel");
+const GenreModel = require("../../../genre/model/genreModel");
 const MovieModel = require("../../model/movieModel");
 const MovieRepository = require("../movieRepository");
 const createMovieTest = require("../../fixture/movieFixture");
@@ -9,7 +11,8 @@ const createMovieTest = require("../../fixture/movieFixture");
 describe("Movie repository methods", () => {
   let movieRepository;
   let movieModel;
-
+  let characterModel;
+  let genreModel;
   beforeEach(async () => {
     // Setup DB in memory
     const sequelizeInstance = new Sequelize("sqlite::memory", {
@@ -18,6 +21,9 @@ describe("Movie repository methods", () => {
 
     // Setup Models
     movieModel = MovieModel.setup(sequelizeInstance);
+    characterModel = CharacterModel.setup(sequelizeInstance);
+    genreModel = GenreModel.setup(sequelizeInstance);
+    movieModel.setupAssociation(characterModel, genreModel);
 
     // Instantiate repository
     movieRepository = new MovieRepository(movieModel);
@@ -49,6 +55,13 @@ describe("Movie repository methods", () => {
       expect(savedMovie.id).to.equal(1);
       expect(savedMovie.title).to.equal("Interstellar");
     });
+
+    it("should add a movie with a character associatied", async () => {
+      await characterModel.create({id: 1, name: ''})
+      
+      const movie = createMovieTest();
+      await movieRepository.save(movie);
+    });
   });
 
   describe("getAll method", () => {
@@ -64,19 +77,18 @@ describe("Movie repository methods", () => {
     });
   });
 
-  describe("deletem method", () => {
+  describe("delete method", () => {
     it("delete removes a movie from db and returns true", async () => {
       const movie = createMovieTest();
       await movieRepository.save(movie);
       await movieRepository.save(movie);
-  
+
       const isDeleted = await movieRepository.delete(1);
       expect(isDeleted).to.equal(true);
-      
+
       const moviesInDb = await movieModel.findAll();
       expect(moviesInDb).to.have.lengthOf(1);
       expect(moviesInDb[0].id).to.equal(2);
     });
-
-  })
+  });
 });

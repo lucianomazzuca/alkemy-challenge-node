@@ -1,18 +1,22 @@
-const { fromModelToEntity } = require("../mapper/moveMapper");
+const { fromModelToEntity } = require("../mapper/movieMapper");
 
 module.exports = class MovieRepository {
   constructor(movieModel) {
     this.movieModel = movieModel;
   }
 
-  async save(movie) {
-    const newMovie = this.movieModel.build(movie, {
+  async save(movie, charactersId = []) {
+    const movieModel = this.movieModel.build(movie, {
       isNewRecord: !movie.id,
     });
 
-    await newMovie.save();
+    charactersId.map(async (id) => {
+      await movieModel.addCharacter(id);
+    })
 
-    return fromModelToEntity(newMovie);
+    await movieModel.save();
+
+    return fromModelToEntity(movieModel);
   }
 
   async getAll() {

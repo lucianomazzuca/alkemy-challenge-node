@@ -48,7 +48,7 @@ module.exports = class Movie extends Model {
     Movie.belongsToMany(GenreModel, {
       through: 'movies_genres',
       foreignKey: 'movie_id',
-      as: 'characters',
+      as: 'genres',
       uniqueKey: 'id'
     })
   }
