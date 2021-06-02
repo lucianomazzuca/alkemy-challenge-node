@@ -9,6 +9,7 @@ const MovieRepository = require("../movieRepository");
 
 const createMovieTest = require("../../fixture/movieFixture");
 const createCharacterTest = require("../../../character/fixture/characterFixture");
+const createGenreTest = require("../../../genre/fixture/genreFixture");
 
 describe("Movie repository methods", () => {
   let movieRepository;
@@ -34,24 +35,33 @@ describe("Movie repository methods", () => {
   });
 
   describe("save method", () => {
-    it("should add a movie with a character associatied", async () => {
+
+    it("should add a movie with a genre associated and character associated", async () => {
+      // Create a genre in the db
+      const genre = createGenreTest();
+      await genreModel.create(genre);
+
       // Create a character in the db
       const character = createCharacterTest();
       await characterModel.create(character);
 
-      // Create Movie with character id
+      // Create Movie with genre id
       const movie = createMovieTest();
-      await movieRepository.save(movie, [1]);
+      await movieRepository.save(movie, [1], [1]);
 
       const savedMovie = await movieModel.findByPk(1, {
-        include: [{ model: characterModel, as: "characters" }],
+        include: [
+          { model: genreModel, as: "genres" },
+          { model: characterModel, as: "characters" },
+        ],
       });
 
       expect(savedMovie.id).to.equal(1);
       expect(savedMovie.characters[0].id).to.equal(1);
       expect(savedMovie.characters[0].name).to.equal(character.name);
+      expect(savedMovie.genres[0].id).to.equal(1);
+      expect(savedMovie.genres[0].name).to.equal(genre.name);
     });
-
 
     it("should add a new movie to the db", async () => {
       const movie = createMovieTest();

@@ -5,13 +5,14 @@ module.exports = class MovieRepository {
     this.movieModel = movieModel;
   }
 
-  async save(movie, charactersId = []) {
+  async save(movie, charactersId = [], genresId = []) {
     const movieModel = this.movieModel.build(movie, {
       isNewRecord: !movie.id,
     });
 
     await movieModel.save();
     await movieModel.setCharacters(charactersId);
+    await movieModel.setGenres(genresId);
 
     return fromModelToEntity(movieModel);
   }
