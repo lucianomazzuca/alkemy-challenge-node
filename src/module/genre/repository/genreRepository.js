@@ -24,5 +24,11 @@ module.exports = class GenreRepository {
     return genres.map((genre) => fromModelToEntity(genre));
   }
 
-  async getById(id) {}
+  async getById(id) {
+    const genre = await this.genreModel.findByPk(id, {
+      include: { model: this.movieModel, as: "movies" },
+    });
+
+    return fromModelToEntity(genre);
+  }
 };

@@ -62,7 +62,7 @@ describe("Genre repository methods", () => {
     });
   });
 
-  describe("getAll method", async () => {
+  describe("getAll method", () => {
     it("should return all genres in the db with movies associated", async () => {
       // Create genre in db
       const genre = createGenreTest();
@@ -83,4 +83,24 @@ describe("Genre repository methods", () => {
       expect(genres[0].movies[0].name).to.equal(movie.name);
     });
   });
+
+  describe("getById method", () => {
+    it("should return the first movie in the db", async () => {
+      // Create genre in db
+      const genre = createGenreTest();
+      await genreRepository.save(genre);
+
+      // Create movie with genre associated in db
+      const movie = createMovieTest();
+      const movieBuild = movieModel.build(movie);
+      await movieBuild.save();
+      await movieBuild.setGenres([1]);
+
+      const genreInDB = await genreRepository.getById(1);
+      expect(genreInDB.id).to.equal(1);
+      expect(genreInDB.name).to.equal(genre.name);
+      expect(genreInDB.movies).to.have.lengthOf(1);
+      expect(genreInDB.movies[0].id).to.equal(1);
+    })
+  })
 });
