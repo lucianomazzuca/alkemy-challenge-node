@@ -1,8 +1,9 @@
 const { fromModelToEntity } = require("../mapper/genreMapper");
 
 module.exports = class GenreRepository {
-  constructor(genreModel) {
+  constructor(genreModel, movieModel) {
     this.genreModel = genreModel;
+    this.movieModel = movieModel;
   }
 
   async save(genre) {
@@ -13,11 +14,15 @@ module.exports = class GenreRepository {
     await newGenre.save();
 
     return fromModelToEntity(newGenre);
-  };
+  }
 
   async getAll() {
-    const genres = await this.genreModel.findAll();
+    const genres = await this.genreModel.findAll({
+      include: { model: this.movieModel, as: "movies" },
+    });
 
     return genres.map((genre) => fromModelToEntity(genre));
   }
-}
+
+  async getById(id) {}
+};
