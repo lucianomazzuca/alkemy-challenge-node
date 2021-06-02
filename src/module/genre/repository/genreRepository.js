@@ -31,4 +31,8 @@ module.exports = class GenreRepository {
 
     return fromModelToEntity(genre);
   }
+
+  async delete(id) {
+    return Boolean(await this.genreModel.destroy({ where: { id } }));
+  }
 };

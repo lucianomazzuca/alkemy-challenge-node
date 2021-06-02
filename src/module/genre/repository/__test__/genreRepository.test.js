@@ -101,6 +101,26 @@ describe("Genre repository methods", () => {
       expect(genreInDB.name).to.equal(genre.name);
       expect(genreInDB.movies).to.have.lengthOf(1);
       expect(genreInDB.movies[0].id).to.equal(1);
-    })
-  })
+    });
+  });
+
+  describe("delete method", () => {
+    it("should delete a genre from the db and return true", async () => {
+      // Create genres in db
+      const genre = createGenreTest();
+      await genreRepository.save(genre);
+      await genreRepository.save(genre);
+
+      const isDeleted = await genreRepository.delete(1);
+      expect(isDeleted).to.equal(true);
+
+      const genresInDb = await genreModel.findAll();
+      expect(genresInDb).to.have.lengthOf(1);
+    });
+
+    it("should return false when the genre doesn't exist in the db", async () => {
+      const isDeleted = await genreRepository.delete(1);
+      expect(isDeleted).to.equal(false);
+    });
+  });
 });
