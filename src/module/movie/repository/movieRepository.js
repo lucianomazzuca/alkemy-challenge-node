@@ -1,8 +1,10 @@
 const { fromModelToEntity } = require("../mapper/movieMapper");
 
 module.exports = class MovieRepository {
-  constructor(movieModel) {
+  constructor(movieModel, characterModel, genreModel) {
     this.movieModel = movieModel;
+    this.characterModel = characterModel;
+    this.genreModel = genreModel;
   }
 
   async save(movie, charactersId = [], genresId = []) {
@@ -21,6 +23,16 @@ module.exports = class MovieRepository {
     const movies = await this.movieModel.findAll();
 
     return movies.map((movie) => fromModelToEntity(movie));
+  }
+
+  async getById(id) {
+    const movie = await this.movieModel.findByPk(id, {
+      include: [
+        { model: this.characterModel, as: "characters" },
+      ],
+    });
+
+    return fromModelToEntity(movie);
   }
 
   async delete(id) {

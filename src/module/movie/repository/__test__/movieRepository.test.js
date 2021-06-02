@@ -11,17 +11,17 @@ const createMovieTest = require("../../fixture/movieFixture");
 const createCharacterTest = require("../../../character/fixture/characterFixture");
 const createGenreTest = require("../../../genre/fixture/genreFixture");
 
+// Setup DB in memory
+const sequelizeInstance = new Sequelize("sqlite::memory", {
+  logging: false,
+});
+
 describe("Movie repository methods", () => {
   let movieRepository;
   let movieModel;
   let characterModel;
   let genreModel;
   beforeEach(async () => {
-    // Setup DB in memory
-    const sequelizeInstance = new Sequelize("sqlite::memory", {
-      logging: false,
-    });
-
     // Setup Models
     movieModel = MovieModel.setup(sequelizeInstance);
     characterModel = CharacterModel.setup(sequelizeInstance);
@@ -29,13 +29,16 @@ describe("Movie repository methods", () => {
     movieModel.setupAssociation(characterModel, genreModel);
 
     // Instantiate repository
-    movieRepository = new MovieRepository(movieModel);
+    movieRepository = new MovieRepository(
+      movieModel,
+      characterModel,
+      genreModel
+    );
 
     await sequelizeInstance.sync({ force: true });
   });
 
   describe("save method", () => {
-
     it("should add a movie with a genre associated and character associated", async () => {
       // Create a genre in the db
       const genre = createGenreTest();
@@ -113,6 +116,22 @@ describe("Movie repository methods", () => {
       const moviesInDb = await movieModel.findAll();
       expect(moviesInDb).to.have.lengthOf(1);
       expect(moviesInDb[0].id).to.equal(2);
+    });
+  });
+
+  describe("getById method", () => {
+    it("returns a movie with characters associated", async () => {
+      // Create a character in the db
+      const character = createCharacterTest();
+      await characterModel.create(character);
+
+      // Create Movie with genre id
+      const movie = createMovieTest();
+      await movieRepository.save(movie, [1], undefined);
+
+      const savedMovie = await movieRepository.getById(1);
+      expect(savedMovie.characters[0].id).to.equal(1);
+      expect(savedMovie.characters[0].name).to.equal(character.name);
     });
   });
 });
