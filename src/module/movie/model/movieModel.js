@@ -33,23 +33,30 @@ module.exports = class Movie extends Model {
         modelName: "Movie",
       }
     );
-      
+
     return Movie;
   }
 
   static setupAssociation(CharacterModel, GenreModel) {
     Movie.belongsToMany(CharacterModel, {
-      through: 'movies_characters',
-      foreignKey: 'movie_id',
-      as: 'characters',
-      uniqueKey: 'id'
-    })
+      through: "movies_characters",
+      foreignKey: "movie_id",
+      as: "characters",
+      uniqueKey: "id",
+    });
 
     Movie.belongsToMany(GenreModel, {
-      through: 'movies_genres',
-      foreignKey: 'movie_id',
-      as: 'genres',
-      uniqueKey: 'id'
-    })
+      through: "movies_genres",
+      foreignKey: "movie_id",
+      as: "genres",
+      uniqueKey: "id",
+    });
+
+    CharacterModel.belongsToMany(Movie, {
+      through: "movies_characters",
+      foreignKey: "character_id",
+      as: "movies",
+      uniqueKey: "id",
+    });
   }
 };

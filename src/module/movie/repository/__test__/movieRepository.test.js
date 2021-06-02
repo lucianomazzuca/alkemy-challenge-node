@@ -6,7 +6,9 @@ const CharacterModel = require("../../../character/model/characterModel");
 const GenreModel = require("../../../genre/model/genreModel");
 const MovieModel = require("../../model/movieModel");
 const MovieRepository = require("../movieRepository");
+
 const createMovieTest = require("../../fixture/movieFixture");
+const createCharacterTest = require("../../../character/fixture/characterFixture");
 
 describe("Movie repository methods", () => {
   let movieRepository;
@@ -32,6 +34,25 @@ describe("Movie repository methods", () => {
   });
 
   describe("save method", () => {
+    it("should add a movie with a character associatied", async () => {
+      // Create a character in the db
+      const character = createCharacterTest();
+      await characterModel.create(character);
+
+      // Create Movie with character id
+      const movie = createMovieTest();
+      await movieRepository.save(movie, [1]);
+
+      const savedMovie = await movieModel.findByPk(1, {
+        include: [{ model: characterModel, as: "characters" }],
+      });
+
+      expect(savedMovie.id).to.equal(1);
+      expect(savedMovie.characters[0].id).to.equal(1);
+      expect(savedMovie.characters[0].name).to.equal(character.name);
+    });
+
+
     it("should add a new movie to the db", async () => {
       const movie = createMovieTest();
       await movieRepository.save(movie);
@@ -54,13 +75,6 @@ describe("Movie repository methods", () => {
       const savedMovie = await movieModel.findByPk(1);
       expect(savedMovie.id).to.equal(1);
       expect(savedMovie.title).to.equal("Interstellar");
-    });
-
-    it("should add a movie with a character associatied", async () => {
-      await characterModel.create({id: 1, name: ''})
-      
-      const movie = createMovieTest();
-      await movieRepository.save(movie);
     });
   });
 

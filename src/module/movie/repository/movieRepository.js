@@ -10,11 +10,8 @@ module.exports = class MovieRepository {
       isNewRecord: !movie.id,
     });
 
-    charactersId.map(async (id) => {
-      await movieModel.addCharacter(id);
-    })
-
     await movieModel.save();
+    await movieModel.setCharacters(charactersId);
 
     return fromModelToEntity(movieModel);
   }
