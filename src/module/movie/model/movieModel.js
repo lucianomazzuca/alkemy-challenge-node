@@ -52,11 +52,5 @@ module.exports = class Movie extends Model {
       uniqueKey: "id",
     });
 
-    CharacterModel.belongsToMany(Movie, {
-      through: "movies_characters",
-      foreignKey: "character_id",
-      as: "movies",
-      uniqueKey: "id",
-    });
   }
 };

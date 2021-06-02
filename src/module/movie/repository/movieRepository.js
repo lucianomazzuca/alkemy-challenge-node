@@ -29,6 +29,7 @@ module.exports = class MovieRepository {
     const movie = await this.movieModel.findByPk(id, {
       include: [
         { model: this.characterModel, as: "characters" },
+        { model: this.genreModel, as: "genres" },
       ],
     });
 

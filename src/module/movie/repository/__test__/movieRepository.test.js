@@ -117,6 +117,14 @@ describe("Movie repository methods", () => {
       expect(moviesInDb).to.have.lengthOf(1);
       expect(moviesInDb[0].id).to.equal(2);
     });
+
+    it("returns false when there is no movie with that id", async () => {
+      const isDeleted = await movieRepository.delete(1);
+      expect(isDeleted).to.equal(false);
+
+      const moviesInDb = await movieModel.findAll();
+      expect(moviesInDb).to.have.lengthOf(0);
+    });
   });
 
   describe("getById method", () => {

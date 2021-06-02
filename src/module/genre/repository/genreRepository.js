@@ -1,3 +1,5 @@
+const { fromModelToEntity } = require("../mapper/genreMapper");
+
 module.exports = class GenreRepository {
   constructor(genreModel) {
     this.genreModel = genreModel;
@@ -10,6 +12,12 @@ module.exports = class GenreRepository {
 
     await newGenre.save();
 
-    return newGenre;
+    return fromModelToEntity(newGenre);
+  };
+
+  async getAll() {
+    const genres = await this.genreModel.findAll();
+
+    return genres.map((genre) => fromModelToEntity(genre));
   }
 }
