@@ -1,9 +1,8 @@
 const chai = require("chai");
-const chaiAsPromised = require("chai-as-promised");
 
-const { expect } = require("chai");
-
-const { Sequelize } = require("sequelize");
+const { expect } = chai;
+chai.use(require("chai-as-promised"));
+const sequelizeInstance = require("../../../../config/sequelize");
 
 const MovieModel = require("../../../movie/model/movieModel");
 const CharacterModel = require("../../../character/model/characterModel");
@@ -13,19 +12,18 @@ const GenreRepository = require("../genreRepository");
 const createGenreTest = require("../../fixture/genreFixture");
 const createMovieTest = require("../../../movie/fixture/movieFixture");
 const NotFoundError = require("../../../../shared/error/NotFoundError");
-const ArgumentIsEmptyError = require("../../../../shared/error/ArgumentIsEmptyError");
 
 // Setup DB in memory
-const sequelizeInstance = new Sequelize("sqlite::memory", {
-  logging: false,
-});
 
 describe("Genre repository methods", () => {
   let genreRepository;
   let genreModel;
   let movieModel;
   let characterModel;
+
   beforeEach(async () => {
+    await sequelizeInstance.drop();
+
     // Setup Models
     genreModel = GenreModel.setup(sequelizeInstance);
     movieModel = MovieModel.setup(sequelizeInstance);
@@ -39,9 +37,10 @@ describe("Genre repository methods", () => {
     await sequelizeInstance.sync({ force: true });
   });
 
-  after(() => {
-    sequelizeInstance.close();
-  });
+  after(async () => {
+    await sequelizeInstance.truncate();
+  })
+
 
   describe("Save method", () => {
     it("should add a new genre to the db", async () => {
@@ -113,7 +112,9 @@ describe("Genre repository methods", () => {
     });
 
     it("should throw error when the genre is not found", async () => {
-      await expect(genreRepository.getById(1)).to.be.rejectedWith(NotFoundError)
+      await expect(genreRepository.getById(1)).to.be.rejectedWith(
+        NotFoundError
+      );
     });
   });
 

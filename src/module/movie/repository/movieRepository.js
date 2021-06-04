@@ -1,3 +1,4 @@
+const NotFountError = require("../../../shared/error/NotFoundError");
 const { fromModelToEntity } = require("../mapper/movieMapper");
 
 module.exports = class MovieRepository {
@@ -32,6 +33,10 @@ module.exports = class MovieRepository {
         { model: this.genreModel, as: "genres" },
       ],
     });
+
+    if (!movie) {
+      throw new NotFountError(`Movie with id ${id} was not found`);
+    }
 
     return fromModelToEntity(movie);
   }

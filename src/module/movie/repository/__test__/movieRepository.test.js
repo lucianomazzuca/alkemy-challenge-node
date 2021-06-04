@@ -1,6 +1,9 @@
-const { expect } = require("chai");
+const chai = require("chai");
 
-const { Sequelize } = require("sequelize");
+const { expect } = chai;
+chai.use(require("chai-as-promised"));
+
+const sequelizeInstance = require("../../../../config/sequelize");
 
 const CharacterModel = require("../../../character/model/characterModel");
 const GenreModel = require("../../../genre/model/genreModel");
@@ -10,18 +13,21 @@ const MovieRepository = require("../movieRepository");
 const createMovieTest = require("../../fixture/movieFixture");
 const createCharacterTest = require("../../../character/fixture/characterFixture");
 const createGenreTest = require("../../../genre/fixture/genreFixture");
+const NotFoundError = require("../../../../shared/error/NotFoundError");
 
 // Setup DB in memory
-const sequelizeInstance = new Sequelize("sqlite::memory", {
-  logging: false,
-});
+// let sequelizeInstance = new Sequelize("sqlite::memory", {
+//   logging: false,
+// });
 
 describe("Movie repository methods", () => {
   let movieRepository;
   let movieModel;
   let characterModel;
   let genreModel;
+
   beforeEach(async () => {
+    await sequelizeInstance.truncate();
     // Setup Models
     movieModel = MovieModel.setup(sequelizeInstance);
     characterModel = CharacterModel.setup(sequelizeInstance);
@@ -39,7 +45,7 @@ describe("Movie repository methods", () => {
   });
 
   describe("save method", () => {
-    it("should add a movie with a genre associated and character associated", async () => {
+    it("should add a movie with a genre and character associated", async () => {
       // Create a genre in the db
       const genre = createGenreTest();
       await genreModel.create(genre);
@@ -140,6 +146,12 @@ describe("Movie repository methods", () => {
       const savedMovie = await movieRepository.getById(1);
       expect(savedMovie.characters[0].id).to.equal(1);
       expect(savedMovie.characters[0].name).to.equal(character.name);
+    });
+
+    it("should throw error when the movie is not found", async () => {
+      await expect(movieRepository.getById(1)).to.be.rejectedWith(
+        NotFoundError
+      );
     });
   });
 });

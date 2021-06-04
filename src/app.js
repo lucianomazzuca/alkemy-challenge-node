@@ -8,7 +8,6 @@ app.get("/", (req, res) => {
   res.send("Hello world");
 });
 
-
 app.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log(`Server listening at port ${port}`);
