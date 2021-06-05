@@ -8,6 +8,10 @@ app.get("/", (req, res) => {
   res.send("Hello world");
 });
 
+const { initAuthModule } = require('./module/auth/module');
+
+initAuthModule(app);
+
 app.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log(`Server listening at port ${port}`);

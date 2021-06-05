@@ -4,6 +4,6 @@ module.exports = class AuthController {
   };
 
   async index(req, res) {
-    
+    res.send('hello world')
   }
 }
