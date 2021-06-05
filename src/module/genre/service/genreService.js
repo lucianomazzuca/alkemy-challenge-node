@@ -1,0 +1,1 @@
+const Genre = require('../entity/Genre');
