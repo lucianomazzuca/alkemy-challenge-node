@@ -23,5 +23,17 @@ module.exports = class CharacterRepository {
     });
 
     return characters.map((character) => fromModelToEntity(character));
+  };
+
+  async getById(id) {
+    const character = await this.characterModel.findByPk(id, {
+      include: { model: this.movieModel, as: "movies" },
+    });
+
+    if (!character) {
+      throw new NotFoundError(`Character with id ${id} was not found`);
+    };
+
+    return fromModelToEntity(character);
   }
 };

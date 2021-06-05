@@ -81,4 +81,30 @@ describe("Character repository methods", () => {
       expect(characters[0].movies[0].name).to.equal(movie.name);
     });
   });
+
+  describe("getById method", () => {
+    it("should return the first chracter in the db", async () => {
+            // Create genre in db
+      const character = createCharacterTest();
+      await characterRepository.save(character);
+
+      // Create movie with character associated in db
+      const movie = createMovieTest();
+      const movieBuild = movieModel.build(movie);
+      await movieBuild.save();
+      await movieBuild.setCharacters([1]);
+
+      const characterInDB = await characterRepository.getById(1);
+      expect(characterInDB.id).to.equal(1);
+      expect(characterInDB.name).to.equal(character.name);
+      expect(characterInDB.movies).to.have.lengthOf(1);
+      expect(characterInDB.movies[0].id).to.equal(1);
+    });
+
+    it("should throw error when the character is not found", async () => {
+      await expect(characterRepository.getById(1)).to.be.rejectedWith(
+        NotFoundError
+      )
+    });
+  })
 });
