@@ -23,7 +23,7 @@ module.exports = class CharacterRepository {
     });
 
     return characters.map((character) => fromModelToEntity(character));
-  };
+  }
 
   async getById(id) {
     const character = await this.characterModel.findByPk(id, {
@@ -32,8 +32,12 @@ module.exports = class CharacterRepository {
 
     if (!character) {
       throw new NotFoundError(`Character with id ${id} was not found`);
-    };
+    }
 
     return fromModelToEntity(character);
+  }
+
+  async delete(id) {
+    return Boolean(await this.characterModel.destroy({ where: { id } }));
   }
 };

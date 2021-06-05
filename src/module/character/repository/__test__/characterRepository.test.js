@@ -47,7 +47,7 @@ describe("Character repository methods", () => {
     });
 
     it("should update an existing character in the db", async () => {
-      let character = createCharacterTest();
+      const character = createCharacterTest();
       await characterRepository.save(character);
 
       character.id = 1;
@@ -84,7 +84,7 @@ describe("Character repository methods", () => {
 
   describe("getById method", () => {
     it("should return the first chracter in the db", async () => {
-            // Create genre in db
+      // Create genre in db
       const character = createCharacterTest();
       await characterRepository.save(character);
 
@@ -104,7 +104,27 @@ describe("Character repository methods", () => {
     it("should throw error when the character is not found", async () => {
       await expect(characterRepository.getById(1)).to.be.rejectedWith(
         NotFoundError
-      )
+      );
     });
-  })
+  });
+
+  describe("delete method", () => {
+    it("should delete a genre from the db and return true", async () => {
+      // Create genres in db
+      const character = createCharacterTest();
+      await characterRepository.save(character);
+      await characterRepository.save(character);
+
+      const isDeleted = await characterRepository.delete(1);
+      expect(isDeleted).to.equal(true);
+
+      const charactersInDb = await characterModel.findAll();
+      expect(charactersInDb).to.have.lengthOf(1);
+    });
+
+    it("should return false when the genre doesn't exist in the db", async () => {
+      const isDeleted = await characterRepository.delete(1);
+      expect(isDeleted).to.equal(false);
+    });
+  });
 });
