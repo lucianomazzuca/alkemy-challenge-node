@@ -38,7 +38,6 @@ describe("Genre repository methods", () => {
 
   after(async () => {
     await sequelizeInstance.truncate();
-
   })
 
   describe("Save method", () => {
