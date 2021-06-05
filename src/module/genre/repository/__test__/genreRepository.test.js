@@ -13,7 +13,6 @@ const createGenreTest = require("../../fixture/genreFixture");
 const createMovieTest = require("../../../movie/fixture/movieFixture");
 const NotFoundError = require("../../../../shared/error/NotFoundError");
 
-// Setup DB in memory
 
 describe("Genre repository methods", () => {
   let genreRepository;
@@ -28,8 +27,8 @@ describe("Genre repository methods", () => {
     genreModel = GenreModel.setup(sequelizeInstance);
     movieModel = MovieModel.setup(sequelizeInstance);
     characterModel = CharacterModel.setup(sequelizeInstance);
-    genreModel.setupAssociation(movieModel);
     movieModel.setupAssociation(characterModel, genreModel);
+    genreModel.setupAssociation(movieModel);
 
     // Instantiate repository
     genreRepository = new GenreRepository(genreModel, movieModel);
@@ -39,8 +38,8 @@ describe("Genre repository methods", () => {
 
   after(async () => {
     await sequelizeInstance.truncate();
-  })
 
+  })
 
   describe("Save method", () => {
     it("should add a new genre to the db", async () => {

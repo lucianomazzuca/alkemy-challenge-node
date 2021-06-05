@@ -15,11 +15,6 @@ const createCharacterTest = require("../../../character/fixture/characterFixture
 const createGenreTest = require("../../../genre/fixture/genreFixture");
 const NotFoundError = require("../../../../shared/error/NotFoundError");
 
-// Setup DB in memory
-// let sequelizeInstance = new Sequelize("sqlite::memory", {
-//   logging: false,
-// });
-
 describe("Movie repository methods", () => {
   let movieRepository;
   let movieModel;
@@ -27,12 +22,13 @@ describe("Movie repository methods", () => {
   let genreModel;
 
   beforeEach(async () => {
-    await sequelizeInstance.truncate();
     // Setup Models
     movieModel = MovieModel.setup(sequelizeInstance);
     characterModel = CharacterModel.setup(sequelizeInstance);
     genreModel = GenreModel.setup(sequelizeInstance);
+
     movieModel.setupAssociation(characterModel, genreModel);
+    genreModel.setupAssociation(movieModel)
 
     // Instantiate repository
     movieRepository = new MovieRepository(
