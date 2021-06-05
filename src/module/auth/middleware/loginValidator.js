@@ -1,4 +1,4 @@
-const { body, validationResult } = require('express-validator');
+const { body } = require('express-validator');
 
 const loginValidatorRules = [
   body('name').trim().notEmpty().withMessage("Name can't be empty"),

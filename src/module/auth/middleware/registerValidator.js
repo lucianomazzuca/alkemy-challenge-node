@@ -1,4 +1,4 @@
-const { body, validationResult } = require("express-validator");
+const { body } = require("express-validator");
 
 const registerValidatorRules = [
   body("email").trim().isEmail().withMessage("You have to enter a valid email"),
