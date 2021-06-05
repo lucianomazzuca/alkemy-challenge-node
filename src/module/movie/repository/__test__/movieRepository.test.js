@@ -22,13 +22,16 @@ describe("Movie repository methods", () => {
   let genreModel;
 
   beforeEach(async () => {
+    await sequelizeInstance.drop();
+
     // Setup Models
     movieModel = MovieModel.setup(sequelizeInstance);
     characterModel = CharacterModel.setup(sequelizeInstance);
     genreModel = GenreModel.setup(sequelizeInstance);
 
     movieModel.setupAssociation(characterModel, genreModel);
-    genreModel.setupAssociation(movieModel)
+    genreModel.setupAssociation(movieModel);
+    characterModel.setupAssociation(movieModel);
 
     // Instantiate repository
     movieRepository = new MovieRepository(
@@ -38,6 +41,10 @@ describe("Movie repository methods", () => {
     );
 
     await sequelizeInstance.sync({ force: true });
+  });
+
+  after(async () => {
+    await sequelizeInstance.truncate();
   });
 
   describe("save method", () => {

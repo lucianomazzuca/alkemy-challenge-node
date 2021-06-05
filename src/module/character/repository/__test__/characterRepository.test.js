@@ -27,13 +27,18 @@ describe("Character repository methods", () => {
     movieModel = MovieModel.setup(sequelizeInstance);
     genreModel = GenreModel.setup(sequelizeInstance);
 
-    characterModel.setupAssociation(movieModel);
     movieModel.setupAssociation(characterModel, genreModel);
+    characterModel.setupAssociation(movieModel);
+    genreModel.setupAssociation(movieModel);
 
     // Instantiate repository
     characterRepository = new CharacterRepository(characterModel, movieModel);
 
     await sequelizeInstance.sync({ force: true });
+  });
+
+  after(async () => {
+    await sequelizeInstance.truncate();
   });
 
   describe("save method", () => {
