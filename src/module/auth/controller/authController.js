@@ -8,6 +8,6 @@ module.exports = class AuthController {
   }
 
   async register(req, res) {
-    
+    res.send(req.name)
   }
 }
