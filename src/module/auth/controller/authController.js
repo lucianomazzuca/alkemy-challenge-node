@@ -9,9 +9,7 @@ module.exports = class AuthController {
     const user = req.body;
 
     try {
-
       await this.authService.register(user);
-
     } catch (e) {
       if (e instanceof UserAlreadyExistsError) {
         return res.status(400).json({ msg: e.message });
