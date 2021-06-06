@@ -9,7 +9,7 @@
     "db:undo-migration": "sequelize-cli db:migrate:undo",
     "test": "cross-env NODE_ENV=test mocha 'src/**/__test__/*'",
     "test:watch": "cross-env NODE_ENV=test mocha 'src/**/__test__/*' --watch",
-    "test:file": "cross-env NODE_ENV=test mocha --watch src/module/auth/controller/__test__/authController.test.js"
+    "test:file": "cross-env NODE_ENV=test mocha --watch src/module/auth/service/__test__/authService.test.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/lucianomazzuca/alkemy-challenge#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
     "dotenv": "^10.0.0",

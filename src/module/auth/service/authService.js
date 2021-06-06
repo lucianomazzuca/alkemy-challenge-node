@@ -1,8 +1,9 @@
 const UserAlreadyExistsError = require("../../../shared/error/user/UserAlreadyExistsError");
 
 module.exports = class AuthService {
-  constructor(userRepository) {
+  constructor(userRepository, bcrypt) {
     this.userRepository = userRepository;
+    this.bcrypt = bcrypt;
   }
 
   async register(user) {
@@ -15,6 +16,11 @@ module.exports = class AuthService {
     const userToSave = user;
     userToSave.password = await this.authService.encryptPassword(user.password);
     await this.userRepository.save(userToSave);
-  };
+  }
 
+  async encryptPassword(password) {
+    const salt = await this.bcrypt.genSalt(10);
+    const hash = await this.bcrypt.hash(password, salt);
+    return hash;
+  }
 };
