@@ -8,13 +8,13 @@ module.exports = class AuthService {
 
   async register(user) {
     // Check if an user with the given name already exists
-    const userRegistered = await this.userService.getByName(user.name);
+    const userRegistered = await this.userRepository.getByName(user.name);
     if (userRegistered) {
       throw new UserAlreadyExistsError(`This name is already in use`);
     }
 
     const userToSave = user;
-    userToSave.password = await this.authService.encryptPassword(user.password);
+    userToSave.password = await this.encryptPassword(userToSave.password);
     await this.userRepository.save(userToSave);
   }
 
