@@ -16,7 +16,6 @@ const { initAuthModule } = require("./module/auth/module");
 initAuthModule(app);
 
 app.use((err, req, res, next) => {
-  console.log(err);
   res.status(err.status || 500);
   res.send(err.message);
   return;

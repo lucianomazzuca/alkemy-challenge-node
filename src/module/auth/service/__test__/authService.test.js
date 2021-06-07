@@ -6,10 +6,12 @@ const sinon = require("sinon");
 
 const AuthService = require("../authService");
 const UserAlreadyExistsError = require("../../../../shared/error/user/UserAlreadyExistsError");
+const UserWrongCredentialsErrror = require("../../../../shared/error/user/UserWrongCredentialsError");
 
 const mockBcrypt = {
   genSalt: sinon.stub(),
   hash: sinon.stub().returns("hash"),
+  compare: sinon.stub(),
 };
 
 const mockUserRepository = {
@@ -62,6 +64,23 @@ describe("Auth service methods", () => {
       await expect(authService.register(user)).to.be.rejectedWith(
         UserAlreadyExistsError
       );
+    });
+  });
+
+  describe("checkPassword method", () => {
+    it("calls bcrypt compare method and returns true", async () => {
+      mockBcrypt.compare.returns(true);
+
+      const result = await authService.checkPassword("password", "hash");
+
+      expect(mockBcrypt.compare.calledOnceWith("password", "hash")).to.be.true;
+      expect(result).to.be.true;
+    });
+
+    it("throw error when bcrypt's compare method returns false", async () => {
+      mockBcrypt.compare.returns(false);
+
+      await expect(authService.checkPassword("password", "hash")).to.be.rejectedWith(UserWrongCredentialsErrror);
     });
   });
 });

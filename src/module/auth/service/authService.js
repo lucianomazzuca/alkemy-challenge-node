@@ -1,4 +1,6 @@
 const UserAlreadyExistsError = require("../../../shared/error/user/UserAlreadyExistsError");
+const UserWrongCredentialsError = require("../../../shared/error/user/UserWrongCredentialsError");
+const NotFoundError = require('../../../shared/error/NotFoundError');
 
 module.exports = class AuthService {
   constructor(userRepository, bcrypt) {
@@ -23,4 +25,12 @@ module.exports = class AuthService {
     const hash = await this.bcrypt.hash(password, salt);
     return hash;
   }
+
+  async checkPassword(password, hash) {
+    const result = await this.bcrypt.compare(password, hash);
+    if (!result) {
+      throw new UserWrongCredentialsError();
+    }
+    return result;
+  };
 };
