@@ -1,11 +1,11 @@
 const UserAlreadyExistsError = require("../../../shared/error/user/UserAlreadyExistsError");
 const UserWrongCredentialsError = require("../../../shared/error/user/UserWrongCredentialsError");
-const NotFoundError = require('../../../shared/error/NotFoundError');
 
 module.exports = class AuthService {
-  constructor(userRepository, bcrypt) {
+  constructor(userRepository, bcrypt, jwt) {
     this.userRepository = userRepository;
     this.bcrypt = bcrypt;
+    this.jwt = jwt;
   }
 
   async register(user) {
@@ -32,5 +32,11 @@ module.exports = class AuthService {
       throw new UserWrongCredentialsError();
     }
     return result;
-  };
+  }
+
+  async generateJwt(username) {
+    return this.jwt.sign(username, process.env.TOKEN_SECRET, {
+      expiresIn: "1y",
+    });
+  }
 };
