@@ -12,12 +12,16 @@ module.exports = class AuthController {
       await this.authService.register(user);
     } catch (e) {
       if (e instanceof UserAlreadyExistsError) {
-        return res.status(400).json({ msg: e.message });
+        return res.status(400).json({ error: e.message });
       }
 
       next(e);
     }
 
     return res.status(201).json({ msg: "success" });
+  };
+
+  async login(req, res, next) {
+    res.send('hello')
   }
 };
