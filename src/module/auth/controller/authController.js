@@ -1,8 +1,10 @@
 const UserAlreadyExistsError = require("../../../shared/error/user/UserAlreadyExistsError");
+const UserWrongCredentialsError = require("../../../shared/error/user/UserWrongCredentialsError");
 
 module.exports = class AuthController {
-  constructor(authService) {
+  constructor(authService, userRepository) {
     this.authService = authService;
+    this.userRepository = userRepository;
   }
 
   async register(req, res, next) {
@@ -19,9 +21,34 @@ module.exports = class AuthController {
     }
 
     return res.status(201).json({ msg: "success" });
-  };
+  }
 
   async login(req, res, next) {
-    res.send('hello')
+    const user = req.body;
+
+    try {
+      // search user name in db
+      const userRegistered = await this.userRepository.getByName(user.name);
+      if (!userRegistered) {
+        throw new UserWrongCredentialsError(`Name ${user.name} is not registered`);
+      }
+  
+      // check passwords
+      await this.authService.checkPassword(
+        user.password,
+        userRegistered.password
+      );
+
+      // send jwt
+      const jwt = await this.authService.generateJwt(user.name);
+      return res.status(200).json({token: jwt})
+
+    } catch(e) {
+      if (e instanceof UserWrongCredentialsError) {
+        return res.status(401).json({ error: e.message })
+      }
+      next(e)
+    }
+
   }
 };

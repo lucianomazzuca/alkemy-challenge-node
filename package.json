@@ -9,7 +9,7 @@
     "db:undo-migration": "sequelize-cli db:migrate:undo",
     "test": "cross-env NODE_ENV=test mocha 'src/**/__test__/*'",
     "test:watch": "cross-env NODE_ENV=test mocha 'src/**/__test__/*' --watch",
-    "test:file": "cross-env NODE_ENV=test mocha --watch src/module/auth/service/__test__/authService.test.js"
+    "test:file": "cross-env NODE_ENV=test mocha --watch src/module/auth/controller/__test__/authController.test.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
     "eslint-plugin-mocha": "^9.0.0",
     "express": "^4.17.1",
     "express-validator": "^6.11.1",
+    "jsonwebtoken": "^8.5.1",
     "mocha": "^8.4.0",
     "pg": "^8.6.0",
     "pg-hstore": "^2.3.3",

@@ -29,13 +29,18 @@ module.exports = class AuthService {
   async checkPassword(password, hash) {
     const result = await this.bcrypt.compare(password, hash);
     if (!result) {
-      throw new UserWrongCredentialsError();
+      throw new UserWrongCredentialsError(`Wrong credentials`);
     }
     return result;
   }
 
   async generateJwt(username) {
-    return this.jwt.sign(username, process.env.TOKEN_SECRET, {
+    const payload = {
+      sub: username,
+      iat: Math.floor(Date.now / 1000),
+    };
+
+    return this.jwt.sign(payload, process.env.TOKEN_SECRET, {
       expiresIn: "1y",
     });
   }
