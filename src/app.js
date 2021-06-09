@@ -7,17 +7,15 @@ const port = 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Hello world");
-});
-
 const { initAuthModule } = require("./module/auth/module");
+const { initCharacterModule } = require("./module/character/module");
 
 initAuthModule(app);
+initCharacterModule(app);
 
 app.use((err, req, res) => {
   res.status(500);
-  res.send('Server error');
+  res.send("Server error");
 });
 
 app.listen(port, () => {
