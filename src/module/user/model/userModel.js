@@ -10,7 +10,7 @@ class User extends Model {
           autoIncrement: true,
           primaryKey: true,
         },
-        name: {
+        mail: {
           type: DataTypes.STRING,
           allowNull: false,
         },

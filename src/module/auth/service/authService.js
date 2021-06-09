@@ -10,9 +10,9 @@ module.exports = class AuthService {
 
   async register(user) {
     // Check if an user with the given name already exists
-    const userRegistered = await this.userRepository.getByName(user.name);
+    const userRegistered = await this.userRepository.getByMail(user.mail);
     if (userRegistered) {
-      throw new UserAlreadyExistsError(`This name is already in use`);
+      throw new UserAlreadyExistsError(`This mail is already in use`);
     }
 
     const userToSave = user;

@@ -25,8 +25,8 @@ module.exports = class UserRepository {
     return fromModelToEntity(user);
   }
 
-  async getByName(name) {
-    const user = await this.userModel.findOne({ where: { name } });
+  async getByMail(mail) {
+    const user = await this.userModel.findOne({ where: { mail } });
 
     if (!user) {
       return null;

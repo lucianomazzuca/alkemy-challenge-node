@@ -25,12 +25,11 @@ module.exports = class AuthController {
 
   async login(req, res, next) {
     const user = req.body;
-
     try {
       // search user name in db
-      const userRegistered = await this.userRepository.getByName(user.name);
+      const userRegistered = await this.userRepository.getByMail(user.mail);
       if (!userRegistered) {
-        throw new UserWrongCredentialsError(`Name ${user.name} is not registered`);
+        throw new UserWrongCredentialsError(`Email ${user.mail} is not registered`);
       }
   
       // check passwords
@@ -40,7 +39,7 @@ module.exports = class AuthController {
       );
 
       // send jwt
-      const jwt = await this.authService.generateJwt(user.name);
+      const jwt = await this.authService.generateJwt(user.mail);
       return res.status(200).json({token: jwt})
 
     } catch(e) {

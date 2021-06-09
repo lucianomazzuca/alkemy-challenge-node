@@ -32,7 +32,7 @@ describe("User repository methods", () => {
 
       const userInDb = await userModel.findByPk(1);
       expect(userInDb.id).to.equal(1);
-      expect(userInDb.name).to.equal(user.name);
+      expect(userInDb.mail).to.equal(user.mail);
     });
 
     it("should update an existing user in the db", async () => {
@@ -40,13 +40,13 @@ describe("User repository methods", () => {
       await userRepository.save(user);
 
       user.id = 1;
-      user.name = "Test2";
+      user.mail = "Test2";
 
       await userRepository.save(user);
 
       const userInDb = await userModel.findByPk(1);
       expect(userInDb.id).to.equal(1);
-      expect(userInDb.name).to.equal("Test2");
+      expect(userInDb.mail).to.equal("Test2");
     });
   });
 
@@ -57,7 +57,7 @@ describe("User repository methods", () => {
 
       const userInDb = await userRepository.getById(1);
       expect(userInDb.id).to.equal(1);
-      expect(userInDb.name).to.equal(user.name);
+      expect(userInDb.mail).to.equal(user.mail);
     });
 
     it("should throw error when an user is not found", async () => {
@@ -65,18 +65,18 @@ describe("User repository methods", () => {
     });
   });
 
-  describe("getByName method", () => {
+  describe("getByMail method", () => {
     it("should return the first user in db", async () => {
       const user = createUserTest();
       await userRepository.save(user);
 
-      const userInDb = await userRepository.getByName(user.name);
+      const userInDb = await userRepository.getByMail(user.mail);
       expect(userInDb.id).to.equal(1);
-      expect(userInDb.name).to.equal(user.name);
+      expect(userInDb.mail).to.equal(user.mail);
     });
 
     it("should return null if the user is not found", async () => {
-      const userInDb = await userRepository.getByName('test');
+      const userInDb = await userRepository.getByMail('test');
       expect(userInDb).to.be.null;
     });
   });

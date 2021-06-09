@@ -2,14 +2,14 @@ const User = require('../entity/User');
 
 function fromModelToEntity({
   id,
-  name,
+  mail,
   password,
   createdAt,
   udpatedAt
 }) {
   return new User({
     id,
-    name,
+    mail,
     password,
     createdAt,
     udpatedAt,
@@ -18,14 +18,14 @@ function fromModelToEntity({
 
 function fromFormToEntity({
   id,
-  name,
+  mail,
   password,
   createdAt,
   udpatedAt
 }) {
   return new User({
     id,
-    name,
+    mail,
     password,
     createdAt,
     udpatedAt,

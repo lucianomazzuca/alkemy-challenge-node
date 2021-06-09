@@ -15,7 +15,7 @@ const mockBcrypt = {
 };
 
 const mockUserRepository = {
-  getByName: sinon.stub().returns(null),
+  getByMail: sinon.stub().returns(null),
   save: sinon.stub(),
 };
 
@@ -44,22 +44,25 @@ describe("Auth service methods", () => {
   describe("register method", () => {
     it("Checks if the user is registered, encrypts the password and calls repository's save method", async () => {
       const user = {
-        name: "test",
+        mail: "test",
         password: "12345",
       };
+
+      mockUserRepository.getByMail.returns(null)
+      
       await authService.register(user);
 
-      expect(mockUserRepository.getByName.calledOnceWith(user.name)).to.be.true;
+      expect(mockUserRepository.getByMail.calledOnceWith(user.mail)).to.be.true;
       expect(mockUserRepository.save.calledOnceWith(user)).to.be.true;
     });
 
-    it("throws error when service's getByName returns an user", async () => {
+    it("throws error when service's getByEmail returns an user", async () => {
       const user = {
-        name: "test",
+        mail: "test",
         password: "12345",
       };
 
-      mockUserRepository.getByName.returns(user);
+      mockUserRepository.getByMail.returns(user);
 
       await expect(authService.register(user)).to.be.rejectedWith(
         UserAlreadyExistsError
