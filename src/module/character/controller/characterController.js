@@ -3,7 +3,7 @@ module.exports = class CharacterController {
     this.characterService = characterService;
   }
 
-  async index(req, res) {
+  async create(req, res) {
     res.send('hello')
   }
 }
