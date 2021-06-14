@@ -4,6 +4,8 @@ module.exports = class CharacterController {
   }
 
   async create(req, res) {
-    res.send('hello')
+    const character = req.body;
+
+    res.send(character)
   }
 }
