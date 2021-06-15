@@ -6,4 +6,8 @@ module.exports = class CharacterService {
   async save(character) {
     return this.characterRepository.save(character);
   }
+
+  async getAll() {
+    return this.characterRepository.getAll();
+  }
 }
