@@ -3,9 +3,19 @@ module.exports = class CharacterController {
     this.characterService = characterService;
   }
 
-  async create(req, res) {
+  async create(req, res, next) {
     const character = req.body;
 
-    res.send(character)
+    if (req.file) {
+      req.body.image = req.file.filename;
+    }
+
+    try {
+      await this.characterService.save(character);
+    } catch (e) {
+      next(e)
+    }
+
+    return res.sendStatus(201);
   }
-}
+};
