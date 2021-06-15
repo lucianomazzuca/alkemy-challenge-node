@@ -6,6 +6,7 @@ module.exports = class CharacterController {
   async create(req, res, next) {
     const character = req.body;
 
+    // Map image filename to character
     if (req.file) {
       req.body.image = req.file.filename;
     }
@@ -17,5 +18,14 @@ module.exports = class CharacterController {
     }
 
     return res.sendStatus(201);
+  }
+
+  async getAll(req, res, next) {
+    try {
+      const characters = await this.characterService.getAll();
+      res.send(200).json(characters);
+    } catch(e) {
+      next(e);
+    }
   }
 };
