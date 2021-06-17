@@ -21,5 +21,9 @@ module.exports = class CharacterService {
 
   async delete(id) {
     return this.characterRepository.delete(id);
+  };
+
+  async getById(id) {
+    return this.characterRepository.getById(id);
   }
 }

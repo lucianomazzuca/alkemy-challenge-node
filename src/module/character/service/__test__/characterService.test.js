@@ -11,6 +11,7 @@ const mockCharacterRepository = {
   save: sinon.stub(),
   getAll: sinon.stub(),
   delete: sinon.spy(),
+  getById: sinon.spy(),
 };
 
 const characterService = new CharacterService(mockCharacterRepository);
@@ -28,16 +29,13 @@ describe("Character Service methods", () => {
 
   describe("getAll method", () => {
     it("should call repository's getAll method and returns only names and images", async () => {
-      const charactersMock = [
-        createCharacterTest(),
-        createCharacterTest(),
-      ]
-      mockCharacterRepository.getAll.returns(charactersMock)
+      const charactersMock = [createCharacterTest(), createCharacterTest()];
+      mockCharacterRepository.getAll.returns(charactersMock);
 
       const characters = await characterService.getAll();
 
       expect(mockCharacterRepository.getAll.calledOnce).to.be.true;
-      expect(characters[0]).to.have.all.keys('name', 'image');
+      expect(characters[0]).to.have.all.keys("name", "image");
     });
   });
 
@@ -46,6 +44,14 @@ describe("Character Service methods", () => {
       await characterService.delete(1);
 
       expect(mockCharacterRepository.delete.calledOnceWith(1)).to.be.true;
-    })
-  })
+    });
+  });
+
+  describe("getById method", () => {
+    it("should call repository's getById method", async () => {
+      await characterService.getById(1);
+
+      expect(mockCharacterRepository.getById.calledOnceWith(1)).to.be.true;
+    });
+  });
 });
