@@ -8,7 +8,7 @@ module.exports = class CharacterController {
 
     // Map image filename to character
     if (req.file) {
-      req.body.image = req.file.filename;
+      character.image = req.file.filename;
     }
 
     try {
@@ -25,8 +25,9 @@ module.exports = class CharacterController {
       const characters = await this.characterService.getAll();
       res.status(200).json(characters);
     } catch(e) {
-      console.log(e)
       next(e);
     }
   }
+
+
 };
