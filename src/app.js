@@ -7,6 +7,9 @@ const port = 5000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// const setupAssociations = require('./config/setupAssociations');
+// setupAssociations();
+
 const { initAuthModule } = require("./module/auth/module");
 const { initCharacterModule } = require("./module/character/module");
 

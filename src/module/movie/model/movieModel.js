@@ -51,6 +51,5 @@ module.exports = class Movie extends Model {
       as: "genres",
       uniqueKey: "id",
     });
-
   }
 };

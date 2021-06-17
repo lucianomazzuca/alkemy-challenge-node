@@ -11,7 +11,8 @@ const { movieModel } = require("../movie/module");
 // Instantiate dependencies
 const characterModel = CharacterModel.setup(sequelizeInstance);
 characterModel.setupAssociation(movieModel);
-const characterRepository = new CharacterRepository(characterModel);
+console.log(characterModel)
+const characterRepository = new CharacterRepository(characterModel, movieModel);
 const characterService = new CharacterService(characterRepository);
 const characterController = new CharacterController(characterService);
 const characterRouter = configureRouter(characterController);
@@ -22,4 +23,5 @@ function initCharacterModule(app) {
 
 module.exports = {
   initCharacterModule,
+  characterModel
 };
