@@ -27,6 +27,10 @@ module.exports = class CharacterController {
     } catch(e) {
       next(e);
     }
+  };
+
+  async getById(req, res, next) {
+    
   }
 
 

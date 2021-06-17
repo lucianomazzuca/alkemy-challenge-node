@@ -11,7 +11,6 @@ const { movieModel } = require("../movie/module");
 // Instantiate dependencies
 const characterModel = CharacterModel.setup(sequelizeInstance);
 characterModel.setupAssociation(movieModel);
-console.log(characterModel)
 const characterRepository = new CharacterRepository(characterModel, movieModel);
 const characterService = new CharacterService(characterRepository);
 const characterController = new CharacterController(characterService);

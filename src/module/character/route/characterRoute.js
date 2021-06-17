@@ -10,6 +10,7 @@ function configureRouter(characterController) {
     characterController.create.bind(characterController)
   );
   router.get("/", characterController.getAll.bind(characterController));
+  router.get("/:id", characterController.getById.bind(characterController));
 
   return router;
 }
