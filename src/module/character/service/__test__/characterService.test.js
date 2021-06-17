@@ -10,6 +10,7 @@ const createCharacterTest = require("../../fixture/characterFixture");
 const mockCharacterRepository = {
   save: sinon.stub(),
   getAll: sinon.stub(),
+  delete: sinon.spy(),
 };
 
 const characterService = new CharacterService(mockCharacterRepository);
@@ -36,7 +37,15 @@ describe("Character Service methods", () => {
       const characters = await characterService.getAll();
 
       expect(mockCharacterRepository.getAll.calledOnce).to.be.true;
-      expect(characters[0]).to.have.all.keys('name', 'image')
+      expect(characters[0]).to.have.all.keys('name', 'image');
     });
   });
+
+  describe("delete method", () => {
+    it("should call repository's delete method", async () => {
+      await characterService.delete(1);
+
+      expect(mockCharacterRepository.delete.calledOnceWith(1)).to.be.true;
+    })
+  })
 });

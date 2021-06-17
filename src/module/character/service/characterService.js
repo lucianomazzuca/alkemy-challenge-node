@@ -18,4 +18,8 @@ module.exports = class CharacterService {
 
     return charactersNameAndImage;
   }
+
+  async delete(id) {
+    return this.characterRepository.delete(id);
+  }
 }
