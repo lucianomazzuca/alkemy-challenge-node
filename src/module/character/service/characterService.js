@@ -7,8 +7,8 @@ module.exports = class CharacterService {
     return this.characterRepository.save(character);
   }
 
-  async getAll() {
-    const characters = await this.characterRepository.getAll();
+  async getAll(params) {
+    const characters = await this.characterRepository.getAll(params);
     const charactersNameAndImage = characters.map(character => (
       {
         name: character.name,

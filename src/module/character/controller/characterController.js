@@ -21,8 +21,9 @@ module.exports = class CharacterController {
   }
 
   async getAll(req, res, next) {
+    const params = req.query;
     try {
-      const characters = await this.characterService.getAll();
+      const characters = await this.characterService.getAll(params);
       res.status(200).json(characters);
     } catch(e) {
       next(e);
@@ -30,8 +31,11 @@ module.exports = class CharacterController {
   };
 
   async getById(req, res, next) {
-
+    try {
+      const character = await this.characterService.getById(req.params.id);
+      res.status(200).json(character);
+    } catch(e) {
+      next(e);
+    }
   }
-
-
 };

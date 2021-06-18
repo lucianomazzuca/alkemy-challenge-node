@@ -17,9 +17,10 @@ module.exports = class CharacterRepository {
     return fromModelToEntity(newCharacter);
   }
 
-  async getAll() {
+  async getAll(params) {
     const characters = await this.characterModel.findAll({
       include: { model: this.movieModel, as: "movies" },
+      where: params
     });
 
     return characters.map((character) => fromModelToEntity(character));
