@@ -35,12 +35,27 @@ module.exports = class CharacterController {
   async getById(req, res, next) {
     try {
       const character = await this.characterService.getById(req.params.id);
-      res.status(200).json(character);
+      return res.status(200).json(character);
     } catch (e) {
       if (e instanceof NotFoundError) {
         return res.status(401).json({ error: e.message });
       }
-      next(e);
+      return next(e);
+    }
+  }
+
+  async delete(req, res, next) {
+    try {
+      // check if character exists
+      await this.characterService.getById(req.params.id);
+
+      await this.characterService.delete(req.params.id);
+      return res.sendStatus(200);
+    } catch (e) {
+      if (e instanceof NotFoundError) {
+        return res.status(401).json({ error: e.message });
+      }
+      return next(e);
     }
   }
 };
