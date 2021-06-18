@@ -6,12 +6,12 @@ module.exports = class CharacterController {
   }
 
   async create(req, res, next) {
-    const character = req.body;
-
     // Map image filename to character
     if (req.file) {
-      character.image = req.file.filename;
+      req.body.image = req.file.filename;
     }
+    
+    const character = req.body;
 
     try {
       await this.characterService.save(character);
@@ -56,6 +56,22 @@ module.exports = class CharacterController {
         return res.status(401).json({ error: e.message });
       }
       return next(e);
+    }
+  };
+
+  async edit(req, res, next) {
+    if (req.file) {
+      req.body.image = req.file.filename;
+    }
+
+    const character = req.body;
+    character.id = req.params.id;
+
+    try {
+      await this.characterService.save(character);
+      res.sendStatus(200);
+    } catch (e) {
+      next(e);
     }
   }
 };
