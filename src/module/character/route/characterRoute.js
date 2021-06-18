@@ -11,6 +11,7 @@ function configureRouter(characterController) {
   );
   router.get("/", characterController.getAll.bind(characterController));
   router.get("/:id", characterController.getById.bind(characterController));
+  router.delete("/:id", characterController.delete.bind(characterController));
 
   return router;
 }
