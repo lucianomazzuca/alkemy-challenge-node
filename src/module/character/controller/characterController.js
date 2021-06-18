@@ -1,3 +1,5 @@
+const NotFoundError = require("../../../shared/error/NotFoundError");
+
 module.exports = class CharacterController {
   constructor(characterService) {
     this.characterService = characterService;
@@ -14,7 +16,7 @@ module.exports = class CharacterController {
     try {
       await this.characterService.save(character);
     } catch (e) {
-      next(e)
+      next(e);
     }
 
     return res.sendStatus(201);
@@ -25,16 +27,19 @@ module.exports = class CharacterController {
     try {
       const characters = await this.characterService.getAll(params);
       res.status(200).json(characters);
-    } catch(e) {
+    } catch (e) {
       next(e);
     }
-  };
+  }
 
   async getById(req, res, next) {
     try {
       const character = await this.characterService.getById(req.params.id);
       res.status(200).json(character);
-    } catch(e) {
+    } catch (e) {
+      if (e instanceof NotFoundError) {
+        return res.status(401).json({ error: e.message });
+      }
       next(e);
     }
   }
