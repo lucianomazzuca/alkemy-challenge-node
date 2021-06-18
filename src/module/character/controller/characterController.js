@@ -30,7 +30,7 @@ module.exports = class CharacterController {
   };
 
   async getById(req, res, next) {
-    
+
   }
 
 
