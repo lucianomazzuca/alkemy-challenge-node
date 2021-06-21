@@ -12,9 +12,11 @@ app.use(express.json());
 
 const { initAuthModule } = require("./module/auth/module");
 const { initCharacterModule } = require("./module/character/module");
+const { initGenreModule } = require('./module/genre/module');
 
 initAuthModule(app);
 initCharacterModule(app);
+initGenreModule(app);
 
 app.use((err, req, res) => {
   res.status(500);
