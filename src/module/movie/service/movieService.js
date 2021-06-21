@@ -11,6 +11,7 @@ module.exports = class MovieService {
     const movies = await this.movieRepository.getAll(params);
     const moviesNameAndImage = movies.map((movie) => ({
       name: movie.name,
+      release_date: movie.release_date,
       image: movie.image,
     }));
 
