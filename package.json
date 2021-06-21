@@ -9,7 +9,7 @@
     "db:undo-migration": "sequelize-cli db:migrate:undo",
     "test": "cross-env NODE_ENV=test mocha 'src/**/__test__/*'",
     "test:watch": "cross-env NODE_ENV=test mocha 'src/**/__test__/*' --watch",
-    "test:file": "cross-env NODE_ENV=test mocha --watch src/module/character/controller/__test__/characterController.test.js"
+    "test:file": "cross-env NODE_ENV=test mocha --watch src/module/genre/service/__test__/genreService.test.js"
   },
   "repository": {
     "type": "git",
