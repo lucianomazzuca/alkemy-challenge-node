@@ -10,7 +10,7 @@ module.exports = class CharacterController {
     if (req.file) {
       req.body.image = req.file.filename;
     }
-    
+
     const character = req.body;
 
     try {
@@ -57,7 +57,7 @@ module.exports = class CharacterController {
       }
       return next(e);
     }
-  };
+  }
 
   async edit(req, res, next) {
     if (req.file) {
@@ -68,10 +68,16 @@ module.exports = class CharacterController {
     character.id = req.params.id;
 
     try {
+      // check if character exists
+      await this.characterService.getById(req.params.id);
+
       await this.characterService.save(character);
-      res.sendStatus(200);
+      return res.sendStatus(200);
     } catch (e) {
-      next(e);
+      if (e instanceof NotFoundError) {
+        return res.status(401).json({ error: e.message });
+      }
+      return next(e);
     }
   }
 };

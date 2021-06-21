@@ -6,6 +6,7 @@ const sinon = require("sinon");
 const CharacterController = require("../characterController");
 
 const createCharacterTest = require("../../fixture/characterFixture");
+const NotFoundError = require("../../../../shared/error/NotFoundError");
 
 const mockCharacterService = {
   save: sinon.stub(),
@@ -18,6 +19,9 @@ const characterController = new CharacterController(mockCharacterService);
 
 const reqMock = {
   body: createCharacterTest(),
+  params: {
+    id: 1,
+  },
 };
 const resMock = {
   json: sinon.stub(),
@@ -52,6 +56,64 @@ describe("Character controller methods", () => {
       expect(mockCharacterService.getAll.calledOnce).to.be.true;
       expect(resMock.status.calledOnceWith(200)).to.be.true;
       expect(resMock.json.calledOnceWith(characters)).to.be.true;
+    });
+  });
+
+  describe("getById method", async () => {
+    it("should send a status 200 and a character as json", async () => {
+      const character = createCharacterTest();
+      mockCharacterService.getById.returns(character);
+
+      await characterController.getById(reqMock, resMock, nextMock);
+
+      expect(resMock.status.calledOnceWith(200)).to.be.true;
+      expect(resMock.json.calledOnceWith(character)).to.be.true;
+    });
+
+    it("should send a status 401 when getById throws an error", async () => {
+      mockCharacterService.getById.onFirstCall().throws(new NotFoundError());
+
+      await characterController.getById(reqMock, resMock, nextMock);
+      expect(resMock.status.calledOnceWith(401)).to.be.true;
+    });
+  });
+
+  describe("delete method", async () => {
+    it("should call service's delete method and send a status 200", async () => {
+      await characterController.delete(reqMock, resMock, nextMock);
+
+      expect(mockCharacterService.delete.calledOnceWith(1)).to.be.true;
+      expect(resMock.sendStatus.calledOnceWith(200)).to.be.true;
+    });
+
+    it("should send a status 401 when getById throws an error", async () => {
+      mockCharacterService.getById
+        .onFirstCall()
+        .throws(() => new NotFoundError());
+
+      await characterController.delete(reqMock, resMock, nextMock);
+      expect(resMock.status.calledOnceWith(401)).to.be.true;
+    });
+  });
+
+  describe("edit method", async () => {
+    it("should call service's save method and send a status 200", async () => {
+      const character = createCharacterTest();
+      character.id = 1;
+
+      await characterController.edit(reqMock, resMock, nextMock);
+
+      expect(mockCharacterService.save.calledOnceWith(character)).to.be.true;
+      expect(resMock.sendStatus.calledOnceWith(200)).to.be.true;
+    });
+
+    it("should send a status 401 when getById throws an error", async () => {
+      mockCharacterService.getById
+        .onFirstCall()
+        .throws(() => new NotFoundError());
+
+      await characterController.edit(reqMock, resMock, nextMock);
+      expect(resMock.status.calledOnceWith(401)).to.be.true;
     });
   });
 });
