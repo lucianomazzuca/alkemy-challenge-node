@@ -13,10 +13,12 @@ app.use(express.json());
 const { initAuthModule } = require("./module/auth/module");
 const { initCharacterModule } = require("./module/character/module");
 const { initGenreModule } = require('./module/genre/module');
+const { initMovieModule } = require('./module/movie/module');
 
 initAuthModule(app);
 initCharacterModule(app);
 initGenreModule(app);
+initMovieModule(app);
 
 app.use((err, req, res) => {
   res.status(500);

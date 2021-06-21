@@ -17,7 +17,7 @@ const characterController = new CharacterController(characterService);
 const characterRouter = configureRouter(characterController);
 
 function initCharacterModule(app) {
-  app.use("/character", characterRouter);
+  app.use("/characters", characterRouter);
 }
 
 module.exports = {
