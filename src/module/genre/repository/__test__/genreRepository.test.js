@@ -2,43 +2,27 @@ const chai = require("chai");
 
 const { expect } = chai;
 chai.use(require("chai-as-promised"));
-const sequelizeInstance = require("../../../../config/sequelize");
 
-const MovieModel = require("../../../movie/model/movieModel");
-const CharacterModel = require("../../../character/model/characterModel");
-const GenreModel = require("../../model/genreModel");
+const sequelize = require("../../../../config/sequelize");
 const GenreRepository = require("../genreRepository");
 
 const createGenreTest = require("../../fixture/genreFixture");
 const createMovieTest = require("../../../movie/fixture/movieFixture");
 const NotFoundError = require("../../../../shared/error/NotFoundError");
 
-
 describe("Genre repository methods", () => {
-  let genreRepository;
-  let genreModel;
-  let movieModel;
-  let characterModel;
+  const genreModel = sequelize.models.Genre;
+  const movieModel = sequelize.models.Movie;
+  const genreRepository = new GenreRepository(genreModel, movieModel);
 
   beforeEach(async () => {
-    await sequelizeInstance.drop();
-
-    // Setup Models
-    genreModel = GenreModel.setup(sequelizeInstance);
-    movieModel = MovieModel.setup(sequelizeInstance);
-    characterModel = CharacterModel.setup(sequelizeInstance);
-    movieModel.setupAssociation(characterModel, genreModel);
-    genreModel.setupAssociation(movieModel);
-
-    // Instantiate repository
-    genreRepository = new GenreRepository(genreModel, movieModel);
-
-    await sequelizeInstance.sync({ force: true });
+    // await sequelize.drop();
+    await sequelize.sync({ force: true });
   });
 
-  after(async () => {
-    await sequelizeInstance.truncate();
-  })
+  // after(async () => {
+  //   await sequelize.truncate();
+  // });
 
   describe("Save method", () => {
     it("should add a new genre to the db", async () => {
