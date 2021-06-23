@@ -6,7 +6,7 @@ const MovieService = require("./service/movieService");
 const MovieRepository = require("./repository/movieRepository");
 
 // Instantiate dependencies
-const movieRepository = new MovieRepository(models.Movie, models.Character);
+const movieRepository = new MovieRepository(models.Movie, models.Character, models.Genre);
 const movieService = new MovieService(movieRepository);
 const movieController = new MovieController(movieService);
 const movieRouter = configureRouter(movieController);

@@ -99,13 +99,26 @@ describe("Movie controller methods", () => {
   describe("edit method", async () => {
     it("should call service's save method and send a status 200", async () => {
       const movie = createMovieTest();
-      movie.id = 1;
+      movie.characters = '[]';
+      movie.genres = '[]';
+
+      reqMock.body = movie;
 
       await movieController.edit(reqMock, resMock, nextMock);
 
-      expect(mockMovieService.save.calledOnceWith(movie)).to.be.true;
+      expect(mockMovieService.save.calledOnceWith(movie, [], [])).to.be.true;
       expect(resMock.sendStatus.calledOnceWith(200)).to.be.true;
     });
+
+    it("should call service's save method with charactersId and genresId", async () => {
+      const movie = createMovieTest();
+      movie.characters = '[1, 2]';
+      movie.genres = '[1]';
+      reqMock.body = movie;
+
+      await movieController.edit(reqMock, resMock, nextMock);
+      expect(mockMovieService.save.calledOnceWith(movie, [1, 2], [1])).to.be.true;
+    })
 
     it("should send a status 401 when getById throws an error", async () => {
       mockMovieService.getById

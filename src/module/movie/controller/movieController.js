@@ -64,6 +64,16 @@ module.exports = class MovieController {
       req.body.image = req.file.filename;
     }
 
+    let charactersId = [];
+    if (req.body.characters) {
+      charactersId = JSON.parse(req.body.characters);
+    }
+
+    let genresId = [];
+    if (req.body.genres) {
+      genresId = JSON.parse(req.body.genres);
+    }
+
     const movie = req.body;
     movie.id = req.params.id;
 
@@ -71,7 +81,7 @@ module.exports = class MovieController {
       // check if movie exists
       await this.movieService.getById(req.params.id);
 
-      await this.movieService.save(movie);
+      await this.movieService.save(movie, charactersId, genresId);
       return res.sendStatus(200);
     } catch (e) {
       if (e instanceof NotFoundError) {
