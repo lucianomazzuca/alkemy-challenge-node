@@ -1,5 +1,3 @@
-const NotFoundError = require("../../../shared/error/NotFoundError");
-
 module.exports = class CharacterController {
   constructor(characterService) {
     this.characterService = characterService;
@@ -35,26 +33,32 @@ module.exports = class CharacterController {
   async getById(req, res, next) {
     try {
       const character = await this.characterService.getById(req.params.id);
+      if (!character) {
+        return res
+          .status(404)
+          .json(`Character with id ${req.params.id} was not found`);
+      }
+
       return res.status(200).json(character);
     } catch (e) {
-      if (e instanceof NotFoundError) {
-        return res.status(401).json({ error: e.message });
-      }
       return next(e);
     }
   }
 
   async delete(req, res, next) {
+    // check if character exists
+    const characterExists = await this.characterService.getById(req.params.id);
+
     try {
-      // check if character exists
-      await this.characterService.getById(req.params.id);
+      if (!characterExists) {
+        return res
+          .status(404)
+          .json(`Character with id ${req.params.id} was not found`);
+      }
 
       await this.characterService.delete(req.params.id);
       return res.sendStatus(200);
     } catch (e) {
-      if (e instanceof NotFoundError) {
-        return res.status(401).json({ error: e.message });
-      }
       return next(e);
     }
   }
@@ -69,14 +73,18 @@ module.exports = class CharacterController {
 
     try {
       // check if character exists
-      await this.characterService.getById(req.params.id);
+      const characterExists = await this.characterService.getById(
+        req.params.id
+      );
+      if (!characterExists) {
+        return res
+          .status(404)
+          .json(`Character with id ${req.params.id} was not found`);
+      }
 
       await this.characterService.save(character);
       return res.sendStatus(200);
     } catch (e) {
-      if (e instanceof NotFoundError) {
-        return res.status(401).json({ error: e.message });
-      }
       return next(e);
     }
   }

@@ -6,7 +6,6 @@ const sinon = require("sinon");
 const CharacterController = require("../characterController");
 
 const createCharacterTest = require("../../fixture/characterFixture");
-const NotFoundError = require("../../../../shared/error/NotFoundError");
 
 const mockCharacterService = {
   save: sinon.stub(),
@@ -70,29 +69,31 @@ describe("Character controller methods", () => {
       expect(resMock.json.calledOnceWith(character)).to.be.true;
     });
 
-    it("should send a status 401 when getById throws an error", async () => {
-      mockCharacterService.getById.onFirstCall().throws(new NotFoundError());
+    it("should send a status 404 when the character is not found", async () => {
+      mockCharacterService.getById.onFirstCall().returns(null);
 
       await characterController.getById(reqMock, resMock, nextMock);
-      expect(resMock.status.calledOnceWith(401)).to.be.true;
+      expect(resMock.status.calledOnceWith(404)).to.be.true;
     });
   });
 
   describe("delete method", async () => {
     it("should call service's delete method and send a status 200", async () => {
+      const character = createCharacterTest();
+      character.id = 1;
+      mockCharacterService.getById.onFirstCall().returns(character);
+
       await characterController.delete(reqMock, resMock, nextMock);
 
       expect(mockCharacterService.delete.calledOnceWith(1)).to.be.true;
       expect(resMock.sendStatus.calledOnceWith(200)).to.be.true;
     });
 
-    it("should send a status 401 when getById throws an error", async () => {
-      mockCharacterService.getById
-        .onFirstCall()
-        .throws(() => new NotFoundError());
+    it("should send a status 404 when getById returns null", async () => {
+      mockCharacterService.getById.onFirstCall().returns(null);
 
       await characterController.delete(reqMock, resMock, nextMock);
-      expect(resMock.status.calledOnceWith(401)).to.be.true;
+      expect(resMock.status.calledOnceWith(404)).to.be.true;
     });
   });
 
@@ -100,20 +101,23 @@ describe("Character controller methods", () => {
     it("should call service's save method and send a status 200", async () => {
       const character = createCharacterTest();
       character.id = 1;
+      mockCharacterService.getById.onFirstCall().returns(character);
 
       await characterController.edit(reqMock, resMock, nextMock);
 
       expect(mockCharacterService.save.calledOnceWith(character)).to.be.true;
+      expect(mockCharacterService.getById.calledOnceWith(character.id)).to.be
+        .true;
       expect(resMock.sendStatus.calledOnceWith(200)).to.be.true;
     });
 
-    it("should send a status 401 when getById throws an error", async () => {
+    it("should send a status 404 when getById returns null", async () => {
       mockCharacterService.getById
         .onFirstCall()
-        .throws(() => new NotFoundError());
+        .returns(null)
 
       await characterController.edit(reqMock, resMock, nextMock);
-      expect(resMock.status.calledOnceWith(401)).to.be.true;
+      expect(resMock.status.calledOnceWith(404)).to.be.true;
     });
   });
 });

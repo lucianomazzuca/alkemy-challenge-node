@@ -8,7 +8,6 @@ const CharacterRepository = require("../characterRepository");
 
 const createCharacterTest = require("../../fixture/characterFixture");
 const createMovieTest = require("../../../movie/fixture/movieFixture");
-const NotFoundError = require("../../../../shared/error/NotFoundError");
 
 describe("Character repository methods", () => {
   const movieModel = sequelize.models.Movie;
