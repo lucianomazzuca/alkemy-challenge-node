@@ -35,11 +35,14 @@ module.exports = class GenreController {
   async getById(req, res, next) {
     try {
       const genre = await this.genreService.getById(req.params.id);
+      if (!genre) {
+        return res
+          .status(404)
+          .json(`Genre with id ${req.params.id} was not found`);
+      }
+
       return res.status(200).json(genre);
     } catch (e) {
-      if (e instanceof NotFoundError) {
-        return res.status(401).json({ error: e.message });
-      }
       return next(e);
     }
   }
@@ -47,14 +50,16 @@ module.exports = class GenreController {
   async delete(req, res, next) {
     try {
       // check if genre exists
-      await this.genreService.getById(req.params.id);
+      const genreExists = await this.genreService.getById(req.params.id);
+      if (!genreExists) {
+        return res
+          .status(404)
+          .json(`Genre with id ${req.params.id} was not found`);
+      }
 
       await this.genreService.delete(req.params.id);
       return res.sendStatus(200);
     } catch (e) {
-      if (e instanceof NotFoundError) {
-        return res.status(401).json({ error: e.message });
-      }
       return next(e);
     }
   }

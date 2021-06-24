@@ -1,5 +1,4 @@
 const { fromModelToEntity } = require("../mapper/genreMapper");
-const NotFoundError = require('../../../shared/error/NotFoundError')
 
 module.exports = class GenreRepository {
   constructor(genreModel, movieModel) {

@@ -46,10 +46,10 @@ module.exports = class CharacterController {
   }
 
   async delete(req, res, next) {
-    // check if character exists
-    const characterExists = await this.characterService.getById(req.params.id);
-
+    
     try {
+      // check if character exists
+      const characterExists = await this.characterService.getById(req.params.id);
       if (!characterExists) {
         return res
           .status(404)

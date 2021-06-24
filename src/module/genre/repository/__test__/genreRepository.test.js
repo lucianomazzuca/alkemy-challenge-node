@@ -8,7 +8,6 @@ const GenreRepository = require("../genreRepository");
 
 const createGenreTest = require("../../fixture/genreFixture");
 const createMovieTest = require("../../../movie/fixture/movieFixture");
-const NotFoundError = require("../../../../shared/error/NotFoundError");
 
 describe("Genre repository methods", () => {
   const genreModel = sequelize.models.Genre;

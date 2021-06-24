@@ -71,15 +71,18 @@ describe("Genre controller methods", () => {
     });
 
     it("should send a status 401 when getById throws an error", async () => {
-      mockGenreService.getById.onFirstCall().throws(new NotFoundError());
+      mockGenreService.getById.onFirstCall().returns(null);
 
       await genreController.getById(reqMock, resMock, nextMock);
-      expect(resMock.status.calledOnceWith(401)).to.be.true;
+      expect(resMock.status.calledOnceWith(404)).to.be.true;
     });
   });
 
   describe("delete method", async () => {
     it("should call service's delete method and send a status 200", async () => {
+      const genre = createGenreTest(1);
+      mockGenreService.getById.onFirstCall().returns(genre);
+
       await genreController.delete(reqMock, resMock, nextMock);
 
       expect(mockGenreService.delete.calledOnceWith(1)).to.be.true;
@@ -87,12 +90,10 @@ describe("Genre controller methods", () => {
     });
 
     it("should send a status 401 when getById throws an error", async () => {
-      mockGenreService.getById
-        .onFirstCall()
-        .throws(() => new NotFoundError());
+      mockGenreService.getById.onFirstCall().returns(null);
 
       await genreController.delete(reqMock, resMock, nextMock);
-      expect(resMock.status.calledOnceWith(401)).to.be.true;
+      expect(resMock.status.calledOnceWith(404)).to.be.true;
     });
   });
 
@@ -108,9 +109,7 @@ describe("Genre controller methods", () => {
     });
 
     it("should send a status 401 when getById throws an error", async () => {
-      mockGenreService.getById
-        .onFirstCall()
-        .throws(() => new NotFoundError());
+      mockGenreService.getById.onFirstCall().throws(() => new NotFoundError());
 
       await genreController.edit(reqMock, resMock, nextMock);
       expect(resMock.status.calledOnceWith(401)).to.be.true;
