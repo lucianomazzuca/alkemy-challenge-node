@@ -3,8 +3,9 @@ module.exports = class MovieService {
     this.movieRepository = movieRepository;
   }
 
-  async save(movie) {
-    return this.movieRepository.save(movie);
+  async save(movie, charactersId, genresId) {
+    
+    return this.movieRepository.save(movie, charactersId, genresId);
   }
 
   async getAll(params) {

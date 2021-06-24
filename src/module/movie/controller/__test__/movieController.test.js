@@ -15,7 +15,15 @@ const mockMovieService = {
   getById: sinon.stub(),
 };
 
-const movieController = new MovieController(mockMovieService);
+const mockCharacterService = {
+  validateCharacters: sinon.stub(),
+};
+
+const mockGenreService = {
+  validateGenres: sinon.stub(),
+}
+
+const movieController = new MovieController(mockMovieService, mockGenreService, mockCharacterService);
 
 const reqMock = {
   body: createMovieTest(),
@@ -117,6 +125,8 @@ describe("Movie controller methods", () => {
       reqMock.body = movie;
 
       await movieController.edit(reqMock, resMock, nextMock);
+      expect(mockCharacterService.validateCharacters.calledOnceWith([1, 2])).to.be.true;
+      expect(mockGenreService.validateGenres.calledOnceWith([1])).to.be.true;
       expect(mockMovieService.save.calledOnceWith(movie, [1, 2], [1])).to.be.true;
     })
 
@@ -128,5 +138,9 @@ describe("Movie controller methods", () => {
       await movieController.edit(reqMock, resMock, nextMock);
       expect(resMock.status.calledOnceWith(401)).to.be.true;
     });
+
+    it("should send errors when characters or genres doesn't exist in the db", async () => {
+
+    })
   });
 });

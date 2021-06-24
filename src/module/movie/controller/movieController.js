@@ -1,8 +1,10 @@
 const NotFoundError = require("../../../shared/error/NotFoundError");
 
 module.exports = class MovieController {
-  constructor(movieService) {
+  constructor(movieService, genreService, characterService) {
     this.movieService = movieService;
+    this.genreService = genreService;
+    this.characterService = characterService;
   }
 
   async create(req, res, next) {
@@ -64,14 +66,24 @@ module.exports = class MovieController {
       req.body.image = req.file.filename;
     }
 
+    const errors = [];
+    
     let charactersId = [];
     if (req.body.characters) {
       charactersId = JSON.parse(req.body.characters);
+      const characterErrors = this.characterService.validateCharacters(charactersId);
+      errors.concat(characterErrors);
     }
 
     let genresId = [];
     if (req.body.genres) {
       genresId = JSON.parse(req.body.genres);
+      const genresErrors = this.genreService.validateGenres(genresId);
+      errors.concat(genresErrors);
+    }
+
+    if (errors.length > 0) {
+      res.send(400).json(errors);
     }
 
     const movie = req.body;
