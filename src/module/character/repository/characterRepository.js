@@ -20,7 +20,7 @@ module.exports = class CharacterRepository {
   async getAll(params) {
     const characters = await this.characterModel.findAll({
       include: { model: this.movieModel, as: "movies" },
-      where: params
+      where: params,
     });
 
     return characters.map((character) => fromModelToEntity(character));
@@ -32,7 +32,7 @@ module.exports = class CharacterRepository {
     });
 
     if (!character) {
-      throw new NotFoundError(`Character with id ${id} was not found`);
+      return null;
     }
 
     return fromModelToEntity(character);

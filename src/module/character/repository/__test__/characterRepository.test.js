@@ -84,10 +84,9 @@ describe("Character repository methods", () => {
       expect(characterInDB.movies[0].id).to.equal(1);
     });
 
-    it("should throw error when the character is not found", async () => {
-      await expect(characterRepository.getById(1)).to.be.rejectedWith(
-        NotFoundError
-      );
+    it("should return null when the character is not found", async () => {
+      const result = await characterRepository.getById(1);
+      expect(result).to.be.null;
     });
   });
 
