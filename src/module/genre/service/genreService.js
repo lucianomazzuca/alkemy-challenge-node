@@ -28,12 +28,14 @@ module.exports = class GenreService {
   async validateGenres(genresId) {
     const errors = [];
 
-    genresId.forEach(async (id) => {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const id of genresId) {
+      // eslint-disable-next-line no-await-in-loop
       const genre = await this.getById(id);
-      if(!genre) {
+      if (!genre) {
         errors.push(`Genre with id ${id} doesn't exist`);
       }
-    })
+    }
 
     return errors;
   }

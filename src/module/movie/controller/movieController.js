@@ -66,24 +66,24 @@ module.exports = class MovieController {
       req.body.image = req.file.filename;
     }
 
-    const errors = [];
+    let errors = [];
     
     let charactersId = [];
     if (req.body.characters) {
       charactersId = JSON.parse(req.body.characters);
       const characterErrors = await this.characterService.validateCharacters(charactersId);
-      errors.concat(characterErrors);
+      errors = errors.concat(characterErrors);
     }
 
     let genresId = [];
     if (req.body.genres) {
       genresId = JSON.parse(req.body.genres);
       const genresErrors = await this.genreService.validateGenres(genresId);
-      errors.concat(genresErrors);
+      errors = errors.concat(genresErrors);
     }
 
     if (errors.length > 0) {
-      res.send(400).json(errors);
+      return res.status(400).json({errors});
     }
 
     const movie = req.body;

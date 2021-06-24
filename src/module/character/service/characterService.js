@@ -28,12 +28,14 @@ module.exports = class CharacterService {
   async validateCharacters(charactersId) {
     const errors = [];
 
-    charactersId.forEach(async (id) => {
+    // eslint-disable-next-line no-restricted-syntax
+    for(const id of charactersId) {
+      // eslint-disable-next-line no-await-in-loop
       const character = await this.getById(id);
       if (!character) {
-        errors.push(`Character with id ${id} doesn't exist`);
+        errors.push(`Character with id ${id} doesn't exist`)
       }
-    });
+    }
 
     return errors;
   }
