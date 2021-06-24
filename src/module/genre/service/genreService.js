@@ -24,4 +24,17 @@ module.exports = class GenreService {
   async getById(id) {
     return this.genreRepository.getById(id);
   }
+
+  async validateGenres(genresId) {
+    const errors = [];
+
+    genresId.forEach(async (id) => {
+      const genre = await this.getById(id);
+      if(!genre) {
+        errors.push(`Genre with id ${id} doesn't exist`);
+      }
+    })
+
+    return errors;
+  }
 };

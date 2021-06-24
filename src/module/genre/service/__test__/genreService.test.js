@@ -11,7 +11,7 @@ const mockGenreRepository = {
   save: sinon.stub(),
   getAll: sinon.stub(),
   delete: sinon.spy(),
-  getById: sinon.spy(),
+  getById: sinon.stub(),
 };
 
 const genreService = new GenreService(mockGenreRepository);
@@ -52,6 +52,25 @@ describe("Genre Service methods", () => {
       await genreService.getById(1);
 
       expect(mockGenreRepository.getById.calledOnceWith(1)).to.be.true;
+    });
+  });
+
+  describe("validateGenres method", () => {
+    it("should call getById method and return an empty array", async () => {
+      const genre = createGenreTest();
+      mockGenreRepository.getById.returns(genre);
+
+      const result = await genreService.validateGenres([1, 2, 3]);
+      expect(result).to.be.an("array").and.have.lengthOf(0);
+    });
+
+    it("should return an array with error messages when genre doesn't exist", async () => {
+      mockGenreRepository.getById.returns(null);
+
+      const result = await genreService.validateGenres([1, 2]);
+      expect(result).to.be.an("array").and.have.lengthOf(2);
+      expect(result[0]).to.equal("Genre with id 1 doesn't exist");
+      expect(result[1]).to.equal("Genre with id 2 doesn't exist");
     });
   });
 });

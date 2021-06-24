@@ -17,4 +17,5 @@ function initCharacterModule(app) {
 
 module.exports = {
   initCharacterModule,
+  characterService
 };

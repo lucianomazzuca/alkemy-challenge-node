@@ -71,14 +71,14 @@ module.exports = class MovieController {
     let charactersId = [];
     if (req.body.characters) {
       charactersId = JSON.parse(req.body.characters);
-      const characterErrors = this.characterService.validateCharacters(charactersId);
+      const characterErrors = await this.characterService.validateCharacters(charactersId);
       errors.concat(characterErrors);
     }
 
     let genresId = [];
     if (req.body.genres) {
       genresId = JSON.parse(req.body.genres);
-      const genresErrors = this.genreService.validateGenres(genresId);
+      const genresErrors = await this.genreService.validateGenres(genresId);
       errors.concat(genresErrors);
     }
 

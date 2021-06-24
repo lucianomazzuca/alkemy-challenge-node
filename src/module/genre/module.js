@@ -17,4 +17,5 @@ function initGenreModule(app) {
 
 module.exports = {
   initGenreModule,
+  genreService
 };
