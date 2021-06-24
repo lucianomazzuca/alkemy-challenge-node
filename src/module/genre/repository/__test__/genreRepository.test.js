@@ -93,10 +93,9 @@ describe("Genre repository methods", () => {
       expect(genreInDB.movies[0].id).to.equal(1);
     });
 
-    it("should throw error when the genre is not found", async () => {
-      await expect(genreRepository.getById(1)).to.be.rejectedWith(
-        NotFoundError
-      );
+    it("should retrun null when the genre is not found", async () => {
+      const result = await genreRepository.getById(1);
+      await expect(result).to.be.null;
     });
   });
 

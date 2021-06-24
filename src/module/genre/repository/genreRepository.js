@@ -31,7 +31,7 @@ module.exports = class GenreRepository {
     });
 
     if (!genre) {
-      throw new NotFoundError(`Genre with id ${id} was not found`);
+      return null;
     }
     
     return fromModelToEntity(genre);
