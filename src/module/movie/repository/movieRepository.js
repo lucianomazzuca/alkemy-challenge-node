@@ -1,3 +1,4 @@
+const { Op } = require("sequelize");
 const NotFoundError = require("../../../shared/error/NotFoundError");
 const { fromModelToEntity } = require("../mapper/movieMapper");
 
@@ -20,8 +21,24 @@ module.exports = class MovieRepository {
     return fromModelToEntity(movieModel);
   }
 
-  async getAll() {
-    const movies = await this.movieModel.findAll();
+  async getAll(queryOpt) {
+    const where = {};
+
+    if (queryOpt && queryOpt.title) {
+      where.title = { [Op.iLike]: `%${queryOpt.title}%` };
+    }
+
+    if (queryOpt && queryOpt.genre) {
+      where["$genre.id$"] = { [Op.eq]: queryOpt.genre };
+    }
+
+    const movies = await this.movieModel.findAll({
+      include: [
+        { model: this.characterModel, as: "characters" },
+        { model: this.genreModel, as: "genres" },
+      ],
+      where
+    });
 
     return movies.map((movie) => fromModelToEntity(movie));
   }
