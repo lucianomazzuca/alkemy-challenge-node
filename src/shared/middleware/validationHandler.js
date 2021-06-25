@@ -8,7 +8,7 @@ const validationHandler = (req, res, next) => {
   };
 
   return res.status(400).json({
-    errors: error.errors
+    errors: error.array()
   })
 }
 
