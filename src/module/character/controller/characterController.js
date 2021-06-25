@@ -21,9 +21,8 @@ module.exports = class CharacterController {
   }
 
   async getAll(req, res, next) {
-    const params = req.query;
     try {
-      const characters = await this.characterService.getAll(params);
+      const characters = await this.characterService.getAll(req.query);
       res.status(200).json(characters);
     } catch (e) {
       next(e);
