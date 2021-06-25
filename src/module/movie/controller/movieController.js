@@ -25,9 +25,8 @@ module.exports = class MovieController {
   }
 
   async getAll(req, res, next) {
-    const params = req.query;
     try {
-      const movies = await this.movieService.getAll(params);
+      const movies = await this.movieService.getAll(req.query);
       res.status(200).json(movies);
     } catch (e) {
       next(e);

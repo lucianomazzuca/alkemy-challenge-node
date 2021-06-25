@@ -23,21 +23,27 @@ module.exports = class MovieRepository {
 
   async getAll(queryOpt) {
     const where = {};
+    let order;
 
     if (queryOpt && queryOpt.title) {
       where.title = { [Op.iLike]: `%${queryOpt.title}%` };
     }
 
     if (queryOpt && queryOpt.genre) {
-      where["$genre.id$"] = { [Op.eq]: queryOpt.genre };
+      where["$genres.id$"] = { [Op.eq]: queryOpt.genre };
     }
 
+    if (queryOpt && queryOpt.order) {
+      order = [['createdAt', queryOpt.order]]
+    }
+    
     const movies = await this.movieModel.findAll({
       include: [
         { model: this.characterModel, as: "characters" },
         { model: this.genreModel, as: "genres" },
       ],
-      where
+      order,
+      where,
     });
 
     return movies.map((movie) => fromModelToEntity(movie));

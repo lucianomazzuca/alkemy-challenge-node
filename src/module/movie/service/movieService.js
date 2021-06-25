@@ -8,8 +8,8 @@ module.exports = class MovieService {
     return this.movieRepository.save(movie, charactersId, genresId);
   }
 
-  async getAll(params) {
-    const movies = await this.movieRepository.getAll(params);
+  async getAll(queryOpt) {
+    const movies = await this.movieRepository.getAll(queryOpt);
     const moviesNameAndImage = movies.map((movie) => ({
       title: movie.title,
       release_date: movie.release_date,
