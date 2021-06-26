@@ -107,6 +107,8 @@ module.exports = {
         onUpdate: "cascade",
         onDelete: "cascade",
       },
+      created_at: Sequelize.DATE,
+      updated_at: Sequelize.DATE,
     });
 
     await queryInterface.createTable("movies_genres", {
@@ -140,6 +142,8 @@ module.exports = {
         onUpdate: "cascade",
         onDelete: "cascade",
       },
+      created_at: Sequelize.DATE,
+      updated_at: Sequelize.DATE,
     });
   },
 
