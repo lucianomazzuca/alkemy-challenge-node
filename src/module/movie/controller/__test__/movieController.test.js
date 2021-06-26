@@ -21,9 +21,13 @@ const mockCharacterService = {
 
 const mockGenreService = {
   validateGenres: sinon.stub(),
-}
+};
 
-const movieController = new MovieController(mockMovieService, mockGenreService, mockCharacterService);
+const movieController = new MovieController(
+  mockMovieService,
+  mockGenreService,
+  mockCharacterService
+);
 
 const reqMock = {
   body: createMovieTest(),
@@ -46,7 +50,14 @@ describe("Movie controller methods", () => {
   describe("create method", async () => {
     it("should call service's save method", async () => {
       const movie = createMovieTest();
+      movie.characters = "[]";
+      movie.genres = "[]";
 
+      reqMock.body = movie;
+
+      mockGenreService.validateGenres.returns([]);
+      mockCharacterService.validateCharacters.returns([]);
+      
       await movieController.create(reqMock, resMock, nextMock);
 
       expect(mockMovieService.save.calledOnceWith(movie)).to.be.true;
@@ -95,9 +106,7 @@ describe("Movie controller methods", () => {
     });
 
     it("should send a status 401 when getById throws an error", async () => {
-      mockMovieService.getById
-        .onFirstCall()
-        .throws(() => new NotFoundError());
+      mockMovieService.getById.onFirstCall().throws(() => new NotFoundError());
 
       await movieController.delete(reqMock, resMock, nextMock);
       expect(resMock.status.calledOnceWith(401)).to.be.true;
@@ -107,8 +116,11 @@ describe("Movie controller methods", () => {
   describe("edit method", async () => {
     it("should call service's save method and send a status 200", async () => {
       const movie = createMovieTest();
-      movie.characters = '[]';
-      movie.genres = '[]';
+      movie.characters = "[]";
+      movie.genres = "[]";
+
+      mockGenreService.validateGenres.returns([]);
+      mockCharacterService.validateCharacters.returns([]);
 
       reqMock.body = movie;
 
@@ -120,27 +132,29 @@ describe("Movie controller methods", () => {
 
     it("should call service's save method with charactersId and genresId", async () => {
       const movie = createMovieTest();
-      movie.characters = '[1, 2]';
-      movie.genres = '[1]';
+      movie.characters = "[1, 2]";
+      movie.genres = "[1]";
       reqMock.body = movie;
 
+      mockGenreService.validateGenres.returns([]);
+      mockCharacterService.validateCharacters.returns([]);
+
       await movieController.edit(reqMock, resMock, nextMock);
-      expect(mockCharacterService.validateCharacters.calledOnceWith([1, 2])).to.be.true;
+      expect(mockCharacterService.validateCharacters.calledOnceWith([1, 2])).to
+        .be.true;
       expect(mockGenreService.validateGenres.calledOnceWith([1])).to.be.true;
-      expect(mockMovieService.save.calledOnceWith(movie, [1, 2], [1])).to.be.true;
-    })
+      expect(mockMovieService.save.calledOnceWith(movie, [1, 2], [1])).to.be
+        .true;
+    });
 
     it("should send a status 401 when getById throws an error", async () => {
-      mockMovieService.getById
-        .onFirstCall()
-        .throws(() => new NotFoundError());
+      mockMovieService.getById.onFirstCall().throws(() => new NotFoundError());
+
+      mockGenreService.validateGenres.returns([]);
+      mockCharacterService.validateCharacters.returns([]);
 
       await movieController.edit(reqMock, resMock, nextMock);
       expect(resMock.status.calledOnceWith(401)).to.be.true;
     });
-
-    it("should send errors when characters or genres doesn't exist in the db", async () => {
-
-    })
   });
 });

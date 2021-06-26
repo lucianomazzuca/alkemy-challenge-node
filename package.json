@@ -12,7 +12,7 @@
     "db:drop": "sequelize-cli db:drop",
     "test": "cross-env NODE_ENV=test mocha 'src/**/__test__/*'",
     "test:watch": "cross-env NODE_ENV=test mocha 'src/**/__test__/*' --watch",
-    "test:file": "cross-env NODE_ENV=test mocha --watch src/module/movie/repository/__test__/movieRepository.test.js"
+    "test:file": "cross-env NODE_ENV=test mocha --watch src/module/movie/controller/__test__/movieController.test.js"
   },
   "repository": {
     "type": "git",
