@@ -1,4 +1,5 @@
 # alkemy-challenge
+Modificar las variables de entorno en el archivo .env como sea necesario para la base de datos.
 
 ## Instalación
 1. `npm install`
