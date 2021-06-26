@@ -38,7 +38,7 @@ module.exports = class MovieController {
     const movie = req.body;
 
     try {
-      await this.movieService.save(movie);
+      await this.movieService.save(movie, charactersId, genresId);
     } catch (e) {
       next(e);
     }
