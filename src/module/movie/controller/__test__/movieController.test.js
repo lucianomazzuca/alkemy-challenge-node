@@ -93,7 +93,7 @@ describe("Movie controller methods", () => {
       mockMovieService.getById.onFirstCall().throws(new NotFoundError());
 
       await movieController.getById(reqMock, resMock, nextMock);
-      expect(resMock.status.calledOnceWith(401)).to.be.true;
+      expect(resMock.status.calledOnceWith(404)).to.be.true;
     });
   });
 
@@ -109,7 +109,7 @@ describe("Movie controller methods", () => {
       mockMovieService.getById.onFirstCall().throws(() => new NotFoundError());
 
       await movieController.delete(reqMock, resMock, nextMock);
-      expect(resMock.status.calledOnceWith(401)).to.be.true;
+      expect(resMock.status.calledOnceWith(404)).to.be.true;
     });
   });
 
@@ -154,7 +154,7 @@ describe("Movie controller methods", () => {
       mockCharacterService.validateCharacters.returns([]);
 
       await movieController.edit(reqMock, resMock, nextMock);
-      expect(resMock.status.calledOnceWith(401)).to.be.true;
+      expect(resMock.status.calledOnceWith(404)).to.be.true;
     });
   });
 });

@@ -61,7 +61,7 @@ module.exports = class MovieController {
       return res.status(200).json(movie);
     } catch (e) {
       if (e instanceof NotFoundError) {
-        return res.status(401).json({ error: e.message });
+        return res.status(404).json({ error: e.message });
       }
       return next(e);
     }
@@ -76,7 +76,7 @@ module.exports = class MovieController {
       return res.sendStatus(200);
     } catch (e) {
       if (e instanceof NotFoundError) {
-        return res.status(401).json({ error: e.message });
+        return res.status(404).json({ error: e.message });
       }
       return next(e);
     }
@@ -118,7 +118,7 @@ module.exports = class MovieController {
       return res.sendStatus(200);
     } catch (e) {
       if (e instanceof NotFoundError) {
-        return res.status(401).json({ error: e.message });
+        return res.status(404).json({ error: e.message });
       }
       return next(e);
     }
