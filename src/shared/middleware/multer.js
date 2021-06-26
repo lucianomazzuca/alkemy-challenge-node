@@ -5,6 +5,8 @@ const FileFormatError = require("../error/FileFormatError");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
+    const dir = `./public/img/uploads`;
+    fs.mkdirSync(dir, { recursive: true });
     cb(null, "./public/upload");
   },
   filename: function (req, file, cb) {
