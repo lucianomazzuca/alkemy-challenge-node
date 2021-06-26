@@ -9,8 +9,7 @@ module.exports = class MailService {
       to: mail,
       from: this.senderMail,
       subject: "Bienvenido",
-      text: "Gracias por registrarte en mi sitio web",
-      // html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+      text: "Gracias por registrarte en mi sitio web.",
     };
 
     try {

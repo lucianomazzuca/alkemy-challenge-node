@@ -2,9 +2,10 @@ const UserAlreadyExistsError = require("../../../shared/error/user/UserAlreadyEx
 const UserWrongCredentialsError = require("../../../shared/error/user/UserWrongCredentialsError");
 
 module.exports = class AuthController {
-  constructor(authService, userRepository) {
+  constructor(authService, userRepository, mailService) {
     this.authService = authService;
     this.userRepository = userRepository;
+    this.mailService = mailService;
   }
 
   async register(req, res, next) {
@@ -12,6 +13,7 @@ module.exports = class AuthController {
 
     try {
       await this.authService.register(user);
+      await this.mailService.sendMail(user.mail);
     } catch (e) {
       if (e instanceof UserAlreadyExistsError) {
         return res.status(400).json({ error: e.message });
