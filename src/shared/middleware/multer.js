@@ -2,10 +2,13 @@
 const multer = require("multer");
 const path = require("path");
 const FileFormatError = require("../error/FileFormatError");
+const fs = require('fs')
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./public/upload");
+    const dir = `./public/upload`;
+    fs.mkdirSync(dir, { recursive: true });
+    cb(null, dir);
   },
   filename: function (req, file, cb) {
     cb(
@@ -26,9 +29,11 @@ const upload = multer({
       cb(null, true);
     } else {
       cb(null, false);
-      return cb(new FileFormatError("Only .png, .jpg and .jpeg format allowed"));
+      return cb(
+        new FileFormatError("Only .png, .jpg and .jpeg format allowed")
+      );
     }
   },
-}).single('image');
+}).single("image");
 
 module.exports = upload;
