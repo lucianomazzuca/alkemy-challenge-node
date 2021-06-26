@@ -4,7 +4,9 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
+    "start": "node src/app.js",
     "dev": "nodemon src/app.js",
+    "db:create": "sequelize-cli db:create",
     "db:migration": "sequelize-cli db:migrate",
     "db:undo-migration": "sequelize-cli db:migrate:undo",
     "test": "cross-env NODE_ENV=test mocha 'src/**/__test__/*'",
