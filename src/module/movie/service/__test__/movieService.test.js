@@ -35,7 +35,7 @@ describe("Movie Service methods", () => {
       const movies = await movieService.getAll();
 
       expect(mockMovieRepository.getAll.calledOnce).to.be.true;
-      expect(movies[0]).to.have.all.keys("name", "release_date", "image");
+      expect(movies[0]).to.have.all.keys("title", "release_date", "image");
     });
   });
 
